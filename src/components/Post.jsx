@@ -12,6 +12,7 @@ const Container = styled.div`
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   margin: 10px;
   justify-content: center;
+  border-radius: 5px;
 `;
 
 const LeftColumn = styled.div`

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  max-width: 700px;
+  max-width: 650px;
   margin: 10px auto;
   padding: 20px;
   border: 1px solid #ccc;

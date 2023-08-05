@@ -13,20 +13,20 @@ async function getAPIData () {
 
 function App () {
 
-    useEffect(() => {
-        // getAPIData().then((items) => {
-        //     console.log(items);
-        // })
+    // useEffect(() => {
+    //     // getAPIData().then((items) => {
+    //     //     console.log(items);
+    //     // })
 
-        axios.get('http://localhost:3000/api/posts') // Replace with your Rails API endpoint
-            .then(response => {
-                // Use the fetched data in your React app
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }, []);
+    //     axios.get('http://localhost:3000/api/posts') // Replace with your Rails API endpoint
+    //         .then(response => {
+    //             // Use the fetched data in your React app
+    //             console.log(response.data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching data:', error);
+    //         });
+    // }, []);
 
     // useEffect(() => {
     //     const fetchData = async () => {
