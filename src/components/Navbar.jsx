@@ -125,7 +125,7 @@ const Navbar = () => {
 
   return (
     <Nav>
-      <Logo>My Website</Logo>
+      <Logo>Blogs</Logo>
       <SearchBar type="text" placeholder="Search..." />
       <NavigationItems>
         <NavigationItem>
