@@ -122,7 +122,7 @@ const MyComponent = () => {
   };
 
   const seeBlogDetails = () => {
-    navigate("author/title");
+    navigate("/author/title");
   }
 
   return (
