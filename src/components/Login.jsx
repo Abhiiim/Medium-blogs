@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {Container, InputForm, Input, Button} from "./Style";
+import { login } from '../service/login';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +16,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // You can handle login logic here
-    console.log(formData);
+    login(formData);
   };
 
   return (

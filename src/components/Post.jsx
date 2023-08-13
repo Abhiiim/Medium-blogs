@@ -104,7 +104,7 @@ const Button = styled.button`
   }
 `;
 
-const MyComponent = () => {
+const Post = (props) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const contentRef = useRef(null);
   const navigate = useNavigate();
@@ -125,29 +125,24 @@ const MyComponent = () => {
     navigate("/author/title");
   }
 
+  const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const datetime = new Date(props.post.created_at);
+  const date = datetime.getDate() + " " + month[datetime.getMonth()] + " " + datetime.getFullYear()
+
   return (
     <Container>
       <LeftColumn>
         <TopRow>
-            <AuthorName>Abhishek</AuthorName>
-            <div style={{fontSize: "12px"}}>5 Aug 2023</div>
+            <AuthorName> {props.post.author} </AuthorName>
+            <div style={{fontSize: "12px"}}>{date}</div>
         </TopRow>
         <Details onClick={seeBlogDetails}>
-            <Title>6 Best Practices For Creating High-Quality React Apps</Title>
-            <Content ref={contentRef}>
-              ReactJS is a well-known JavaScript library for creating UI that is used in both small and big projects.
-
-              It offers a strong and flexible method for creating reusable components that may be easily combined to create complex UI.
-
-              However, just like any other technology, there are best practices to follow to create high-quality, maintainable, and robust apps.
-
-              In this post, we’ll look at some of the best practices to use when working with ReactJS.{' '}
-            
-            </Content>
+            <Title> {props.post.title} </Title>
+            <Content ref={contentRef}> {props.post.description} </Content>
         </Details>
         <BottomRow>
-            <Tech>React</Tech>
-            <div style={{fontSize: "14px"}}>2 min</div>
+            <Tech> {props.post.topic} </Tech>
+            <div style={{fontSize: "14px"}}> {props.post.minutes_to_read} min </div>
         </BottomRow>
         <BottomRow>
             <Button>
@@ -169,4 +164,4 @@ const MyComponent = () => {
 };
 
 
-export default MyComponent;
+export default Post;

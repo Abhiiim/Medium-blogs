@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import Post from "./Post";
 import Filter from "./Filter";
-import axios from "axios";
+import axios, { all } from "axios";
 import styled from "styled-components";
+// import posts, {getPost} from '../service/posts_service';
 
 const ParentDiv = styled.div`
     display: flex;
@@ -59,42 +60,24 @@ const Div1 = styled.div`
     padding: 10px;
 `;
 
-const API_URL = "http://localhost:3000/posts";
-
-async function getAPIData () {
-    const response = await axios.get(API_URL);
-    return response.data;
-}
+const url = 'http://localhost:3000/articles';
 
 function App () {
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        // getAPIData().then((items) => {
-        //     console.log(items);
-        // })
-
-        axios.get('http://localhost:3000/posts') // Replace with your Rails API endpoint
+        axios.get(url, {
+            withCredentials: true
+        })
             .then(response => {
-                // Use the fetched data in your React app
-                console.log(response.data);
+                setPosts(response.data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
-    }, []);
+    }, [])
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await fetch("http://localhost:3000/posts"); 
-    //             const data = await response.json();
-    //             console.log(data);
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //         }
-    //     };
-    //     fetchData(); 
-    // }, []);
+    console.log(posts);
 
     return (
         <div className="container">
@@ -103,7 +86,13 @@ function App () {
                 <LeftDiv>
                     <Filter />
                     <div className="lists">
-                        <Post />
+                        { 
+                            posts.map((item, index) => {
+                                return (
+                                    <Post key={index} post={item} />
+                                )
+                            })
+                        }
                     </div>
                 </LeftDiv>
                 <RightDiv>

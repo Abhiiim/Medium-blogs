@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import {Container, InputForm, Input, Button} from "./Style";
+import { register } from '../service/register';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -7,6 +9,8 @@ const Signup = () => {
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,7 +20,10 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // You can handle form submission here
-    console.log(formData);
+    // console.log(formData);
+    register(formData);
+
+    navigate("/login")
   };
 
   return (
@@ -25,7 +32,7 @@ const Signup = () => {
         <h2>Sign Up</h2>
         <Input
           type="text"
-          name="username"
+          name="name"
           placeholder="Username"
           value={formData.username}
           onChange={handleChange}

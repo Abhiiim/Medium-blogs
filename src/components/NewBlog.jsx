@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import {Button} from "./Style";
 import Navbar from './Navbar';
+import { postPost } from '../service/posts_service';
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   max-width: 500px;
   margin: 0 auto;
 `;
@@ -50,14 +53,18 @@ const ImageLabel = styled.label`
 
 const NewBlog = () => {
   const [formData, setFormData] = useState({
-    heading: '',
+    title: '',
     content: '',
+    topic: '',
     image: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    // console.log(e.target.value);
   };
 
   const handleImageChange = (e) => {
@@ -68,8 +75,8 @@ const NewBlog = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can handle form submission here
-    console.log(formData);
+    postPost(formData);
+    navigate("/")
   };
 
   return (
@@ -81,8 +88,8 @@ const NewBlog = () => {
             <Label>Title:</Label>
             <Input
             type="text"
-            name="heading"
-            value={formData.heading}
+            name="title"
+            value={formData.title}
             onChange={handleChange}
             placeholder="Enter the heading"
             />
@@ -102,7 +109,7 @@ const NewBlog = () => {
             <Input
             type="text"
             name="topic"
-            value={formData.heading}
+            value={formData.topic}
             onChange={handleChange}
             placeholder="Enter the topic"
             />
