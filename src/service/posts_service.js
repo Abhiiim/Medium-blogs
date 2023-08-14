@@ -23,8 +23,8 @@ export const postPost = (data) => {
         title: data.title,
         topic: data.topic,
         description: data.content,
-        author: "Abhishek",
-        user_id: 1
+        author: data.author,
+        user_id: data.user_id
     }, {
         withCredentials: true,
         headers: {

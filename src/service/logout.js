@@ -1,15 +1,14 @@
 import axios from "axios";
 
-const url = "http://localhost:3000/login"
+const url = "http://localhost:3000/logout"
 
-export async function login (data) {
-    await axios.post(url,  {
-        user: data
-    }, {
+export const logout = () => {
+    axios.delete(url, {
         withCredentials: true,
         headers:{
             credentials: true
         }
+
     })
         .then(res => console.log(res.data))
         .catch(err => console.log(err))

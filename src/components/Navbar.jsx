@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { searchedPost } from '../service/search';
+import { logout } from '../service/logout';
 
 const Nav = styled.nav`
   display: flex;
@@ -117,8 +118,17 @@ const SearchBar = styled.input`
   }
 `;
 
-const Navbar = ({setSearchedPosts}) => {
+const LogoutButton = styled.button`
+  background: none;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+`;
+
+const Navbar = ({setSearchedPosts, isLoggedIn}) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const navigate = useNavigate();
 
   async function fetchData (params) {
     setSearchedPosts(await searchedPost(params))
@@ -135,26 +145,35 @@ const Navbar = ({setSearchedPosts}) => {
     setDropdownVisible(!isDropdownVisible);
   };
 
+  function handleLogout () {
+    logout();
+    navigate("/login");
+  }
+
   return (
     <Nav>
       <Logo>Blogs</Logo>
       <SearchBar type="text" placeholder="Search..." onChange={handleChange} />
       <NavigationItems>
-        <NavigationItem>
+        {isLoggedIn && <NavigationItem>
           <NavLink to="/new-blog">Write</NavLink>
-        </NavigationItem>
-        <NavigationItem>
+        </NavigationItem>}
+        {!isLoggedIn && <NavigationItem>
           <NavLink to="/login">Login</NavLink>
-        </NavigationItem>
-        <NavigationItem>
+        </NavigationItem>}
+        {!isLoggedIn && <NavigationItem>
           <NavLink to="/signup">Signup</NavLink>
-        </NavigationItem>
+        </NavigationItem>}
+        {isLoggedIn && <NavigationItem>
+          <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+        </NavigationItem>}
         <NavigationItem>
           <ProfileIcon onClick={handleProfileClick}>U</ProfileIcon>
           <DropdownMenu visible={isDropdownVisible}>
             <NavLink to="/user/profile" style={{color: "#000"}}>Profile</NavLink>
             <NavLink to="/login" style={{color: "#000"}}>Login</NavLink>
             <NavLink to="/signup" style={{color: "#000"}}>Signup</NavLink>
+            <NavLink to="/login" style={{color: "#000"}}>Logout</NavLink>
           </DropdownMenu>
         </NavigationItem>
       </NavigationItems>

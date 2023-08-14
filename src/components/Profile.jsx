@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import Post from './Post';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { getPost } from '../service/posts_service';
 
 const ProfileContainer = styled.div`
     display: flex;
@@ -93,43 +94,68 @@ const Button = styled.button`
 `;
 
 const Profile = () => {
+  const [posts, setPosts] = useState([]);
+  const navigate = useNavigate ()
+
+  async function fetchPosts() {
+    const params = {author: "Abhishek"};
+    setPosts(await getPost(params));
+  }
+  useEffect(() => {
+    fetchPosts();
+  }, [])
+
+  const editProfile = () => {
+    navigate("/user/edit_profile");
+  }
+
+  const followUser = () => {
+    
+  }
+
   return (
     // <Router>
     <div>
-        <Navbar />
-        <ProfileContainer>
-            <LeftPart>
-                <LeftContent >
-                    <ProfileName>Abhishek</ProfileName>
-                    <ProfileNav>
-                        <Link to="">Home</Link>
-                        <Link to="about">About</Link>
-                    </ProfileNav>
-                    <hr />
-                {/* <Post /> */}
-                </LeftContent>
-                <Routes>
+      <Navbar />
+      <ProfileContainer>
+        <LeftPart>
+          <LeftContent >
+            <ProfileName>Abhishek</ProfileName>
+            <ProfileNav>
+              <Link to="">Home</Link>
+              <Link to="about">About</Link>
+            </ProfileNav>
+            <hr />
+            {
+              posts.map((item, index) => {
+                return (
+                  <Post key={index} post={item} />
+                )
+              })
+            }
+          </LeftContent>
+          {/* <Routes>
                     <Route path="" element = {<Post />} />
                     <Route path="about" element = {<div>Content for Button B</div>} />
-                </Routes>
-            </LeftPart>
-            <ProfileDetails>
-                <ProfilePicture>
-                    <img src="https://via.placeholder.com/100" alt="Profile" />
-                </ProfilePicture>
-                <ProfileInfo>
-                    <h2>Abhishek</h2>
-                    <Button>
-                        <FontAwesomeIcon icon={faEdit} /> Edit Profile
-                    </Button>
-                    <Follow>
-                        <p>Followers: 1000</p>
-                        <p>Following: 500</p>
-                    </Follow>
-                    <FollowButton>Follow</FollowButton>
-                </ProfileInfo>
-            </ProfileDetails>
-        </ProfileContainer>
+                </Routes> */}
+        </LeftPart>
+        <ProfileDetails>
+          <ProfilePicture>
+            <img src="https://via.placeholder.com/100" alt="Profile" />
+          </ProfilePicture>
+          <ProfileInfo>
+            <h2>Abhishek</h2>
+            <Button onClick={() => editProfile()}>
+              <FontAwesomeIcon icon={faEdit} /> Edit Profile
+            </Button>
+            <Follow>
+              <p>Followers: 1000</p>
+              <p>Following: 500</p>
+            </Follow>
+            <FollowButton onClick={followUser}>Follow</FollowButton>
+          </ProfileInfo>
+        </ProfileDetails>
+      </ProfileContainer>
     </div>
     // </Router>
   );

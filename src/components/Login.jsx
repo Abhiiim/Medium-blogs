@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import {Container, InputForm, Input, Button} from "./Style";
 import { login } from '../service/login';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,8 +17,11 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can handle login logic here
+    const loginData = formData;
+    loginData.password_confirmation = formData.password;
+    setFormData(loginData); 
     login(formData);
+    navigate("/");
   };
 
   return (

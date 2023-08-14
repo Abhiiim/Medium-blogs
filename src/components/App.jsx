@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import Post from "./Post";
 import Filter from "./Filter";
-import axios, { all } from "axios";
 import styled from "styled-components";
 import { getPost } from "../service/posts_service";
 import { getTopPosts } from "../service/top_posts";
+import { useNavigate } from "react-router-dom";
+import { currentUser } from "../service/current_user";
 
 const ParentDiv = styled.div`
     display: flex;
@@ -58,38 +59,54 @@ const Div1 = styled.div`
     border: 1px solid #e8e3e3;
     border-radius: 5px;
     padding: 10px;
+    cursor: pointer;
 `;
 
 function App () {
     const [posts, setPosts] = useState([]);
     const [topPosts, setTopPosts] = useState([]);
+    const [user, setUser] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
     async function fetchPosts(){
-        setPosts(await getPost());
+        const data = await getPost();
+        setPosts(data || []);
     }
 
     async function fetchTopPosts(){
-        setTopPosts(await getTopPosts());
+        const data = await getTopPosts();
+        setTopPosts(data || []);
+    }
+
+    async function fetchUser(){
+        setUser(await currentUser());
     }
 
     useEffect(() => {
         fetchPosts();
-    }, [])
-
-    useEffect (() => {
         fetchTopPosts();
+        fetchUser();
+        if (user.data) {
+            setIsLoggedIn(true);
+        }
     }, [])
 
-    console.log(topPosts);
+    const seeBlogDetails = (data) => {
+        navigate("/author/title", {state: data});
+    }
+
+    console.log(isLoggedIn);
+    console.log(user.data);
 
     return (
         <div className="container">
-            <Navbar setSearchedPosts={setPosts} />
+            <Navbar setSearchedPosts={setPosts} isLoggedIn={isLoggedIn} />
             <ParentDiv>
                 <LeftDiv>
                     <Filter setFilteredPosts={setPosts}/>
                     <div className="lists">
-                        { 
+                        { posts.length &&
                             posts.map((item, index) => {
                                 return (
                                     <Post key={index} post={item} />
@@ -102,19 +119,16 @@ function App () {
                     <TopPost>
                         <h3 style={{marginTop: "0"}}>Top Posts</h3>
                         <div>
-                            <Div1>
-                                {
-                                    topPosts.map((post, index) => {
-                                        return (
-                                            <div key={index}>
-                                                <div style={{fontSize: "14px"}}>{post.author}</div>
-                                                <h4 style={{marginTop: "10px"}}>{post.title}</h4>
-                                            </div>
-                                        )
-                                    })
-                                }
-                                
-                            </Div1>
+                            { topPosts.length &&
+                                topPosts.map((post, index) => {
+                                    return (
+                                        <Div1 onClick={() => seeBlogDetails(post)} key={index}>
+                                            <div style={{fontSize: "14px"}}>{post.author}</div>
+                                            <h4 style={{marginTop: "10px"}}>{post.title}</h4>
+                                        </Div1>
+                                    )
+                                })
+                            }
                         </div>
                     </TopPost>
                     {/* <Line></Line> */}

@@ -4,9 +4,6 @@ const url = "http://localhost:3000/signup"
 
 export const register = (data) => {
     axios.post(url, {
-        // email: data.email,
-        // username: data.username,
-        // password_digest: data.password
         user: data
     }, {
         withCredentials: true,
