@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { deletePost } from '../service/posts_service';
 
 const Container = styled.div`
   display: flex;
@@ -121,8 +122,17 @@ const Post = (props) => {
     setIsExpanded(!isExpanded);
   };
 
-  const seeBlogDetails = () => {
-    navigate("/author/title");
+  const seeBlogDetails = (data) => {
+    navigate("/author/title", {state: data});
+  }
+
+  const handleEdit = (data) => {
+    navigate("/new-blog", {state: data});
+  }
+
+  const handleDelete = (data) => {
+    const params = {id: data.id};
+    deletePost(params);
   }
 
   const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -136,7 +146,7 @@ const Post = (props) => {
             <AuthorName> {props.post.author} </AuthorName>
             <div style={{fontSize: "12px"}}> {date} </div>
         </TopRow>
-        <Details onClick={seeBlogDetails}>
+        <Details onClick={() => seeBlogDetails(props.post)}>
             <Title> {props.post.title} </Title>
             <Content ref={contentRef}> {props.post.description} </Content>
         </Details>
@@ -145,10 +155,10 @@ const Post = (props) => {
             <div style={{fontSize: "14px"}}> {props.post.minutes_to_read} min </div>
         </BottomRow>
         <BottomRow>
-            <Button>
+            <Button onClick={() => handleEdit(props.post)}>
               <FontAwesomeIcon icon={faEdit} /> Edit
             </Button>
-            <Button isDelete>
+            <Button isDelete onClick={() => handleDelete(props.post)}>
               <FontAwesomeIcon icon={faTrash} /> Delete
             </Button>
         </BottomRow>

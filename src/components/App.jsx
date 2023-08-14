@@ -5,6 +5,7 @@ import Filter from "./Filter";
 import axios, { all } from "axios";
 import styled from "styled-components";
 import { getPost } from "../service/posts_service";
+import { getTopPosts } from "../service/top_posts";
 
 const ParentDiv = styled.div`
     display: flex;
@@ -14,7 +15,6 @@ const ParentDiv = styled.div`
 
 const LeftDiv = styled.div`
     flex: 5;
-    margin-left: 150px;
 `;
 
 const RightDiv = styled.div`
@@ -62,12 +62,25 @@ const Div1 = styled.div`
 
 function App () {
     const [posts, setPosts] = useState([]);
+    const [topPosts, setTopPosts] = useState([]);
+
     async function fetchPosts(){
         setPosts(await getPost());
     }
+
+    async function fetchTopPosts(){
+        setTopPosts(await getTopPosts());
+    }
+
     useEffect(() => {
         fetchPosts();
     }, [])
+
+    useEffect (() => {
+        fetchTopPosts();
+    }, [])
+
+    console.log(topPosts);
 
     return (
         <div className="container">
@@ -90,8 +103,17 @@ function App () {
                         <h3 style={{marginTop: "0"}}>Top Posts</h3>
                         <div>
                             <Div1>
-                                <div style={{fontSize: "14px"}}>Abhishek</div>
-                                <h4 style={{marginTop: "10px"}}>6 Best Practices For Creating High-Quality React Apps</h4>
+                                {
+                                    topPosts.map((post, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <div style={{fontSize: "14px"}}>{post.author}</div>
+                                                <h4 style={{marginTop: "10px"}}>{post.title}</h4>
+                                            </div>
+                                        )
+                                    })
+                                }
+                                
                             </Div1>
                         </div>
                     </TopPost>

@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment, faSave, faShare } from '@fortawesome/free-solid-svg-icons';
+import { useLocation } from 'react-router-dom';
 
 const ContainerDiv = styled.div`
     display: flex;
@@ -60,49 +61,47 @@ const MiddleActivity = styled.div`
 // const Content = styled.div``
 
 function ShowPost() {
-  return (
-    <div>
-        <Navbar />
-        <ContainerDiv>
-            <Title>6 Best Practices For Creating High-Quality React Apps</Title>
-            <Author>
-                <Img src="https://via.placeholder.com/20" alt="" />
-                <Div1>
-                    <Div2 style={{fontSize: "14px"}}>
-                        <div>Abhishek</div>
-                        <div>Follow</div>
-                    </Div2>
-                    <Div2 style={{fontSize: "12px"}}>
-                        <div>2 min read</div>
-                        <div>5 Aug 2023</div>
-                    </Div2>
-                </Div1>
-            </Author>
-            <MiddleDiv>
-                <MiddleActivity>
-                    <FontAwesomeIcon icon={faThumbsUp} />
-                    <FontAwesomeIcon icon={faComment} />
-                </MiddleActivity>
-                <MiddleActivity>
-                    <FontAwesomeIcon icon={faSave} />
-                    <FontAwesomeIcon icon={faShare} />
-                </MiddleActivity>
-            </MiddleDiv>
-            <div>
-                <p>
-                ReactJS is a well-known JavaScript library for creating UI that is used in both small and big projects. <br/><br/>
-                It offers a strong and flexible method for creating reusable components that may be easily combined to create complex UI.<br/><br/>
-                However, just like any other technology, there are best practices to follow to create high-quality, maintainable, and robust apps.<br/><br/>
-                In this post, we’ll look at some of the best practices to use when working with ReactJS.<br/><br/>
-                Using functional components and hooks instead of class components is one of the most important React best practices.<br/><br/>
-                Functional components are simpler, easier to read and perform better.<br/><br/>
-                Hooks, on the other hand, allow the use of state and other React features inside functional components.<br/><br/>
-                They also help to structure and reason your code by making it clearer what state and logic are associated with a specific component.<br/><br/>
-                </p>
-            </div>
-        </ContainerDiv>
-    </div>
-  )
+
+    const data = useLocation();
+
+    const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const datetime = new Date(data.state.created_at);
+    const date = datetime.getDate() + " " + month[datetime.getMonth()] + " " + datetime.getFullYear()
+
+    return (
+        <div>
+            <Navbar />
+            <ContainerDiv>
+                <Title>{data.state.title}</Title>
+                <Author>
+                    <Img src="https://via.placeholder.com/20" alt="" />
+                    <Div1>
+                        <Div2 style={{ fontSize: "14px" }}>
+                            <div>{data.state.author}</div>
+                            <div>Follow</div>
+                        </Div2>
+                        <Div2 style={{ fontSize: "12px" }}>
+                            <div>{data.state.minutes_to_read} min</div>
+                            <div>{date}</div>
+                        </Div2>
+                    </Div1>
+                </Author>
+                <MiddleDiv>
+                    <MiddleActivity>
+                        <FontAwesomeIcon icon={faThumbsUp} />
+                        <FontAwesomeIcon icon={faComment} />
+                    </MiddleActivity>
+                    <MiddleActivity>
+                        <FontAwesomeIcon icon={faSave} />
+                        <FontAwesomeIcon icon={faShare} />
+                    </MiddleActivity>
+                </MiddleDiv>
+                <div>
+                    {data.state.description}
+                </div>
+            </ContainerDiv>
+        </div>
+    )
 }
 
 export default ShowPost;

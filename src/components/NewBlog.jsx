@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {Button} from "./Style";
 import Navbar from './Navbar';
-import { postPost } from '../service/posts_service';
+import { editPost, postPost } from '../service/posts_service';
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const FormContainer = styled.form`
   max-width: 500px;
@@ -53,18 +53,34 @@ const ImageLabel = styled.label`
 
 const NewBlog = () => {
   const [formData, setFormData] = useState({
+    id: 0,
     title: '',
     content: '',
     topic: '',
     image: '',
   });
+  const [isEdit, setIsEdit] = useState(false);
 
   const navigate = useNavigate();
+  const data = useLocation();
+  
+  useEffect (() => {
+    if (data.state) {
+      setIsEdit(true);
+      const editPost = {
+        id: data.state.id,
+        title: data.state.title,
+        content: data.state.description,
+        topic: data.state.topic,
+        image: data.state.image
+      }
+      setFormData(editPost)
+    }
+  }, [])  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    // console.log(e.target.value);
   };
 
   const handleImageChange = (e) => {
@@ -75,7 +91,11 @@ const NewBlog = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postPost(formData);
+    if (isEdit) {
+      editPost(formData);
+    } else {
+      postPost(formData);
+    }
     navigate("/")
   };
 

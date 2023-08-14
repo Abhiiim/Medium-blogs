@@ -9,6 +9,10 @@ const Container = styled.div`
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 `;
 
 const FilterForm = styled.form`
@@ -40,19 +44,32 @@ const FilterButton = styled.button`
 const Filter = ({setFilteredPosts}) => {
   const [filterAuthor, setFilterAuthor] = useState('');
   const [filterDate, setFilterDate] = useState('');
+  const [sortType, setSortType] = useState("");
 
   async function fetchData (params) {
     setFilteredPosts(await getPost(params))
   }
 
+  const handleSortChange = (e) => {
+    setSortType(e.target.value);
+  }
+
+  const handleSort = () => {
+    let params = {};
+    if (sortType === "likes") {
+      params = {sort_like: 'true'}
+    } else if (sortType === "comments") {
+      params = {sort_comments: 'true'};
+    }
+    fetchData(params);
+  }
+
   const handleFilterSubmit = (e) => {
     e.preventDefault();
-
     const params = {
       author: filterAuthor,
       date: filterDate
     }
-
     fetchData(params)
   };
 
@@ -77,7 +94,15 @@ const Filter = ({setFilteredPosts}) => {
 
         <FilterButton type="submit">Filter</FilterButton>
       </FilterForm>
-      {/* {JSON.stringify(filteredItems)} */}
+      
+      <div className="sort">
+        <select name="" id="sort" onChange={handleSortChange}>
+          <option value="likes">sort by likes</option>
+          <option value="comments">sort by comments</option>
+        </select>
+        <button onClick={handleSort}>Sort</button>
+      </div>
+
     </Container>
   );
 };
