@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
+import { searchedPost } from '../service/search';
 
 const Nav = styled.nav`
   display: flex;
@@ -116,8 +117,19 @@ const SearchBar = styled.input`
   }
 `;
 
-const Navbar = () => {
+const Navbar = ({setSearchedPosts}) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
+
+  async function fetchData (params) {
+    setSearchedPosts(await searchedPost(params))
+  }
+
+  const handleChange = (e) => {
+    const params = {
+      query: e.target.value
+    }
+    fetchData(params);
+  }
 
   const handleProfileClick = () => {
     setDropdownVisible(!isDropdownVisible);
@@ -126,7 +138,7 @@ const Navbar = () => {
   return (
     <Nav>
       <Logo>Blogs</Logo>
-      <SearchBar type="text" placeholder="Search..." />
+      <SearchBar type="text" placeholder="Search..." onChange={handleChange} />
       <NavigationItems>
         <NavigationItem>
           <NavLink to="/new-blog">Write</NavLink>

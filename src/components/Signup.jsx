@@ -32,7 +32,7 @@ const Signup = () => {
         <h2>Sign Up</h2>
         <Input
           type="text"
-          name="name"
+          name="username"
           placeholder="Username"
           value={formData.username}
           onChange={handleChange}

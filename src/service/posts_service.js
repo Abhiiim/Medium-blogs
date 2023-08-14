@@ -1,27 +1,20 @@
-// import React, { useEffect } from "react";
-import { useState } from "react";
 import axios from "axios";
 
 const url = 'http://localhost:3000/articles';
 let create_url = 'http://localhost:3000/create';
 
-let posts = [];
-
-export const getPost = () => {
-    axios.get(url, {
-        withCredentials: true
-    })
-        .then(response => {
-            posts = response.data;
-            return posts;
+export async function getPost(params = {}) {
+    try {
+        const res = await axios.get(url, {
+            params: params,
+            withCredentials: true
         })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-    console.log(posts);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
 }
-
-export default posts;
 
 export const postPost = (data) => {
     // console.log(data);
@@ -33,7 +26,7 @@ export const postPost = (data) => {
         user_id: 1
     }, {
         withCredentials: true,
-        headers:{
+        headers: {
             credentials: true
         }
 

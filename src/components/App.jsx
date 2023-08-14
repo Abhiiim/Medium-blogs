@@ -4,7 +4,7 @@ import Post from "./Post";
 import Filter from "./Filter";
 import axios, { all } from "axios";
 import styled from "styled-components";
-// import posts, {getPost} from '../service/posts_service';
+import { getPost } from "../service/posts_service";
 
 const ParentDiv = styled.div`
     display: flex;
@@ -60,31 +60,21 @@ const Div1 = styled.div`
     padding: 10px;
 `;
 
-const url = 'http://localhost:3000/articles';
-
 function App () {
     const [posts, setPosts] = useState([]);
-
+    async function fetchPosts(){
+        setPosts(await getPost());
+    }
     useEffect(() => {
-        axios.get(url, {
-            withCredentials: true
-        })
-            .then(response => {
-                setPosts(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+        fetchPosts();
     }, [])
-
-    console.log(posts);
 
     return (
         <div className="container">
-            <Navbar />
+            <Navbar setSearchedPosts={setPosts} />
             <ParentDiv>
                 <LeftDiv>
-                    <Filter />
+                    <Filter setFilteredPosts={setPosts}/>
                     <div className="lists">
                         { 
                             posts.map((item, index) => {

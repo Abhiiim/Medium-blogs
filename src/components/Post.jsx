@@ -134,7 +134,7 @@ const Post = (props) => {
       <LeftColumn>
         <TopRow>
             <AuthorName> {props.post.author} </AuthorName>
-            <div style={{fontSize: "12px"}}>{date}</div>
+            <div style={{fontSize: "12px"}}> {date} </div>
         </TopRow>
         <Details onClick={seeBlogDetails}>
             <Title> {props.post.title} </Title>

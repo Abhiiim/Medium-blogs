@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { getPost } from '../service/posts_service';
 
 const Container = styled.div`
   max-width: 650px;
@@ -35,23 +37,23 @@ const FilterButton = styled.button`
   cursor: pointer;
 `;
 
-const Filter = ({ items, setFilteredItems }) => {
+const Filter = ({setFilteredPosts}) => {
   const [filterAuthor, setFilterAuthor] = useState('');
   const [filterDate, setFilterDate] = useState('');
+
+  async function fetchData (params) {
+    setFilteredPosts(await getPost(params))
+  }
 
   const handleFilterSubmit = (e) => {
     e.preventDefault();
 
-    // Filter the items based on the filter values
-    const filteredItems = items.filter((item) => {
-      const matchAuthor =
-        filterAuthor === '' || item.author.toLowerCase().includes(filterAuthor.toLowerCase());
-      const matchDate =
-        filterDate === '' || item.date.toLowerCase().includes(filterDate.toLowerCase());
-      return matchAuthor && matchDate;
-    });
+    const params = {
+      author: filterAuthor,
+      date: filterDate
+    }
 
-    setFilteredItems(filteredItems);
+    fetchData(params)
   };
 
   return (
@@ -75,6 +77,7 @@ const Filter = ({ items, setFilteredItems }) => {
 
         <FilterButton type="submit">Filter</FilterButton>
       </FilterForm>
+      {/* {JSON.stringify(filteredItems)} */}
     </Container>
   );
 };
