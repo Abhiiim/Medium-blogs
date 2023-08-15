@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
+import { create_profile } from '../service/create_profile';
+import { useNavigate } from 'react-router-dom';
 
 const FormContainer = styled.div`
   max-width: 400px;
@@ -49,57 +51,91 @@ const Button = styled.button`
   }
 `;
 
+const InterestDiv = styled.div`
+  display: flex;
+  gap: 15px;
+  align-items: center;
+`;
+
+const FieldButton = styled.button`
+  width: 30px;
+  height: 30px;
+  margin-bottom: 10px;
+`;
+
 function EditProfile() {
-    const [image, setImage] = useState('');
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [interests, setInterests] = useState('');
+  const [image, setImage] = useState('');
+  const [interest, setInterest] = useState("");
+  const [interests, setInterests] = useState([]);
+  const [inputFields, setInputFields] = useState([{ value: '' }]);
+  const navigate = useNavigate();
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = () => {
-            setImage(reader.result);
-        };
-
-        if (file) {
-            reader.readAsDataURL(file);
-        }
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result);
     };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+  const handleInterests = (e) => {
+    setInterest(e.target.value)
+  }
 
-        // Perform form submission logic here
-        console.log('Form data:', {
-            image,
-            name,
-            email,
-            interests,
-        });
-    };
+  const handleAddField = () => {
+    const updatedFields = [...inputFields, { value: '' }];
+    setInputFields(updatedFields);
+    setInterests([...interests, interest]);
+  };
 
-    return (
-        <div>
-            <Navbar />
-            <FormContainer>
-                <h1>Profile Form</h1>
-                <form onSubmit={handleSubmit}>
-                    <Label htmlFor="image">Profile Image:</Label>
-                    <Input type="file" id="image" accept="image/*" onChange={handleImageChange} />
-                    {image && <ImagePreview src={image} alt="Profile Preview" />}
-                    <Label htmlFor="name">Name:</Label>
-                    <Input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} />
-                    <Label htmlFor="email">Email:</Label>
-                    <Input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <Label htmlFor="interests">Interests:</Label>
-                    <TextArea id="interests" value={interests} onChange={(e) => setInterests(e.target.value)} />
-                    <Button type="submit">Submit</Button>
-                </form>
-            </FormContainer>
-        </div>
-    );
+  const handleRemoveField = (index) => {
+    const updatedFields = [...inputFields];
+    updatedFields.splice(index, 1);
+    setInputFields(updatedFields);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setInterests([...interests, interest]);
+    const data = {
+      bio: e.target.bio.value,
+      name: e.target.name.value,
+      interested_topics: interests
+    }
+    // console.log(interests);
+    // create_profile(data);
+    navigate("/user/profile", {state: data});
+  };
+
+  return (
+    <div>
+      <Navbar />
+      <FormContainer>
+        <h1>Profile Form</h1>
+        <form onSubmit={handleSubmit}>
+          <Label htmlFor="image">Profile Image:</Label>
+          <Input type="file" id="image" accept="image/*" />
+          {image && <ImagePreview src={image} alt="Profile Preview" />}
+          <Label htmlFor="name">Name:</Label>
+          <Input type="text" id="name" />
+          <Label htmlFor="interests">Interests:</Label>
+          { inputFields.map((field, index) => (
+            <InterestDiv key={index}>
+              <Input type="text" name="interests" onChange={handleInterests} />
+              <FieldButton onClick={() => handleRemoveField(index)}>-</FieldButton>
+            </InterestDiv>
+          ))}
+          <FieldButton onClick={handleAddField}>+</FieldButton>
+          <Label htmlFor="bio">Bio:</Label>
+          <TextArea id="bio" />
+          <Button type="submit">Submit</Button>
+        </form>
+      </FormContainer>
+    </div>
+  );
 }
 
 export default EditProfile;

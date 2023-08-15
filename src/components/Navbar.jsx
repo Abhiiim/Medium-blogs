@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { searchedPost } from '../service/search';
 import { logout } from '../service/logout';
+import { currentUser } from '../service/current_user';
 
 const Nav = styled.nav`
   display: flex;
@@ -126,13 +127,28 @@ const LogoutButton = styled.button`
   cursor: pointer;
 `;
 
-const Navbar = ({setSearchedPosts, isLoggedIn, user}) => {
+const Navbar = ({ setSearchedPosts}) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState("");
   const navigate = useNavigate();
 
-  async function fetchData (params) {
+  async function fetchData(params) {
     setSearchedPosts(await searchedPost(params))
   }
+
+  async function fetchUser() {
+    setUser(await currentUser());
+  }
+  useEffect(() => {
+    fetchUser();
+  }, [])
+
+  useEffect(() => {
+    if (user.id) {
+      setIsLoggedIn(true);
+    }
+  })
 
   const handleChange = (e) => {
     const params = {
@@ -145,13 +161,13 @@ const Navbar = ({setSearchedPosts, isLoggedIn, user}) => {
     setDropdownVisible(!isDropdownVisible);
   };
 
-  function handleLogout () {
+  function handleLogout() {
     logout();
     navigate("/login");
   }
 
-  function handleProfile () {
-    navigate("/user/profile", {state: {user: user, isLoggedIn: isLoggedIn}});
+  function handleProfile() {
+    navigate("/user/profile");
   }
 
   return (
@@ -174,10 +190,10 @@ const Navbar = ({setSearchedPosts, isLoggedIn, user}) => {
         <NavigationItem>
           <ProfileIcon onClick={handleProfileClick}>U</ProfileIcon>
           <DropdownMenu visible={isDropdownVisible}>
-            {isLoggedIn && <LogoutButton onClick={() => handleProfile()} style={{color: "#000"}}>Profile</LogoutButton>}
-            {!isLoggedIn && <NavLink to="/login" style={{color: "#000"}}>Login</NavLink>}
-            {!isLoggedIn && <NavLink to="/signup" style={{color: "#000"}}>Signup</NavLink>}
-            {isLoggedIn && <NavLink style={{color: "#000"}} onClick={handleLogout}>Logout</NavLink>}
+            {isLoggedIn && <LogoutButton onClick={() => handleProfile()} style={{ color: "#000" }}>Profile</LogoutButton>}
+            {!isLoggedIn && <NavLink to="/login" style={{ color: "#000" }}>Login</NavLink>}
+            {!isLoggedIn && <NavLink to="/signup" style={{ color: "#000" }}>Signup</NavLink>}
+            {isLoggedIn && <NavLink style={{ color: "#000" }} onClick={handleLogout}>Logout</NavLink>}
           </DropdownMenu>
         </NavigationItem>
       </NavigationItems>

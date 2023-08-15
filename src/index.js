@@ -7,7 +7,7 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import NewBlog from './components/NewBlog';
 import ShowPost from './components/ShowPost';
-import Profile from './components/Profile';
+import Profile from './components/Profile/index.jsx';
 import EditProfile from './components/EditProfile';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
     element: <ShowPost />
   },
   {
-    path: "/user/profile",
+    path: "/user/profile/*",
     element: <Profile />
   },
   {

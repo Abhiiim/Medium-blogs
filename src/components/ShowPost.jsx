@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment, faSave, faShare } from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router-dom';
+import { currentUser } from '../service/current_user';
 
 const ContainerDiv = styled.div`
     display: flex;
@@ -61,12 +62,70 @@ const MiddleActivity = styled.div`
 // const Content = styled.div``
 
 function ShowPost() {
+    const [comment, setComment] = useState("");
+    const [comments, setComments] = useState(() => {
+        return JSON.parse(localStorage.getItem("comments")) || []
+    });
+    const [user, setUser] = useState("");
+    const [savedPosts, setSavedPosts] = useState(() => {
+        return JSON.parse(localStorage.getItem("saved_posts")) || []
+    })
+
+    async function fetchUser(){
+        setUser(await currentUser());
+    }
+
+    useEffect(() => {
+        fetchUser();   
+    }, [])
 
     const data = useLocation();
 
     const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const datetime = new Date(data.state.created_at);
     const date = datetime.getDate() + " " + month[datetime.getMonth()] + " " + datetime.getFullYear()
+
+    function handleComment(e) {
+        setComment(e.target.value);
+    }
+
+    function addComment() {
+        let newComment = {
+            articleId: data.state.id,
+            comment: comment
+        }
+        setComments([...comments, newComment]);
+    }
+
+    let cnt = 0;
+    function countComments () {
+        comments.forEach(item => {
+            if (item.articleId === data.state.id) cnt++;
+        })
+    }
+    countComments();
+
+    useEffect(() => {
+        localStorage.setItem("comments", JSON.stringify(comments));
+    }, [comments])
+
+    function handleSave () {
+        let saved = JSON.parse(localStorage.getItem("saved_posts")) || [];
+        const isAlreadySaved = saved.some((item) => item.userId === user.id && item.articleId === data.state.id);
+        if (!isAlreadySaved) { 
+            const newSave = {
+                userId: user.id,
+                articleId: data.state.id,
+            }
+            setSavedPosts([...savedPosts, newSave])
+        }
+    }
+
+    useEffect(() => {
+        localStorage.setItem("saved_posts", JSON.stringify(savedPosts));
+    }, [savedPosts])
+
+    console.log(savedPosts);
 
     return (
         <div>
@@ -89,16 +148,28 @@ function ShowPost() {
                 <MiddleDiv>
                     <MiddleActivity>
                         <FontAwesomeIcon icon={faThumbsUp} />
-                        <FontAwesomeIcon icon={faComment} />
+                        <span><FontAwesomeIcon icon={faComment} />
+                            <span style={{fontSize: "12px"}}> {cnt}</span>
+                        </span>
                     </MiddleActivity>
                     <MiddleActivity>
-                        <FontAwesomeIcon icon={faSave} />
+                        <FontAwesomeIcon onClick={handleSave} icon={faSave} />
                         <FontAwesomeIcon icon={faShare} />
                     </MiddleActivity>
                 </MiddleDiv>
                 <div>
                     {data.state.description}
                 </div>
+                <div>
+                    <div>Add Comment</div>
+                    <input type="text" onChange={handleComment} />
+                    <button onClick={addComment}>Add</button>
+                </div>
+                { comments.length && comments.map((item, index) => {
+                    if (item.articleId == data.state.id) {
+                        return <div key={index}>{item.comment}</div>
+                    }
+                })}
             </ContainerDiv>
         </div>
     )

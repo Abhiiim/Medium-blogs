@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Navbar from './Navbar';
-import Post from './Post';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
+import Navbar from '../Navbar';
+import { Routes, Route, useNavigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { getPost } from '../service/posts_service';
+import { currentUser } from '../../service/current_user';
+import { userProfile } from '../../service/user_profile';
+import SavedPosts from './SavedPosts';
+import ProfilePosts from './ProfilePosts';
 
 const ProfileContainer = styled.div`
     display: flex;
@@ -13,37 +15,11 @@ const ProfileContainer = styled.div`
     justify-content: center;
 `;
 
-const LeftPart = styled.div`
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: 100px
-`;
-
-const LeftContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-`;
-
-const ProfileName = styled.h1`
-    margin-left: 20px;
-`;
-
-const ProfileNav = styled.div`
-    margin-left: 20px;
-    display: flex;
-    gap: 10px;
-`;
-
 const ProfileDetails = styled.div`
   display: flex;
   flex-direction: column;
-//   align-items: center;
   padding: 20px;
   border-left: 1px solid #ccc;
-//   border-radius: 5px;
   flex: 2;
   height: 100vh;
 `;
@@ -93,74 +69,88 @@ const Button = styled.button`
   }
 `;
 
+const OtherDetails = styled.div`
+  border-top: 1px solid black;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+`;
+
+const Div3 = styled.div`
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const Profile = () => {
-  const [posts, setPosts] = useState([]);
-  const navigate = useNavigate ()
+  const [user, setUser] = useState("");
+  const navigate = useNavigate()
+  const [profile, setProfile] = useState([]);
 
-  const data = useLocation();
-  // console.log(data);
+  async function fetchProfile() {
+    setProfile(await userProfile(user));
+  }
 
-  async function fetchPosts() {
-    const params = {email: "Abhishek"};
-    setPosts(await getPost(params));
+  async function fetchUser() {
+    setUser(await currentUser());
   }
   useEffect(() => {
-    fetchPosts();
+    fetchUser()
+    fetchProfile();
   }, [])
+
 
   const editProfile = () => {
     navigate("/user/edit_profile");
   }
 
-  const followUser = () => {
-    
+  const handleFollow = () => {
+
+  }
+
+  function showSavedPosts() {
+    navigate("/user/profile/saved");
   }
 
   return (
-    // <Router>
     <div>
       <Navbar />
       <ProfileContainer>
-        <LeftPart>
-          <LeftContent >
-            <ProfileName>Abhishek</ProfileName>
-            <ProfileNav>
-              <Link to="">Home</Link>
-              <Link to="about">About</Link>
-            </ProfileNav>
-            <hr />
-            {
-              posts.map((item, index) => {
-                return (
-                  <Post key={index} post={item} />
-                )
-              })
-            }
-          </LeftContent>
-          {/* <Routes>
-                    <Route path="" element = {<Post />} />
-                    <Route path="about" element = {<div>Content for Button B</div>} />
-                </Routes> */}
-        </LeftPart>
+        <Routes>
+          <Route path="/" element={<ProfilePosts />}></Route>
+          <Route path="/saved" element={<SavedPosts />}></Route>
+        </Routes>
         <ProfileDetails>
           <ProfilePicture>
             <img src="https://via.placeholder.com/100" alt="Profile" />
           </ProfilePicture>
           <ProfileInfo>
-            <h2>Abhishek</h2>
+            <h2>{profile.name}</h2>
+            <p>Bio: {profile.bio}</p>
+            <div>Interested Topics:</div>
+              {profile.interested_topics && profile.interested_topics.map((val) => (
+                <div>val</div>
+              ))}
             <Button onClick={() => editProfile()}>
-              <FontAwesomeIcon icon={faEdit} /> Edit Profile
+              <FontAwesomeIcon icon={faEdit} /> Create Profile
             </Button>
             <Follow>
               <p>Followers: 1000</p>
               <p>Following: 500</p>
             </Follow>
-            <FollowButton onClick={followUser}>Follow</FollowButton>
+            <FollowButton onClick={handleFollow}>Follow</FollowButton>
           </ProfileInfo>
+          <OtherDetails>
+            <Div3 onClick={showSavedPosts}>Saved Post</Div3>
+            <Div3>Lists</Div3>
+          </OtherDetails>
         </ProfileDetails>
       </ProfileContainer>
     </div>
-    // </Router>
   );
 };
 

@@ -93,7 +93,7 @@ const Tech = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: ${({ isDelete }) => (isDelete ? '#e81e1e' : 'blue')};
+  background-color: '#3498db';
   color: white;
   border: none;
   border-radius: 5px;
@@ -101,7 +101,7 @@ const Button = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ isDelete }) => (isDelete ? '#e74c3c' : '#3498db')};
+    background-color: '#3498db';
   }
 `;
 
@@ -155,10 +155,10 @@ const Post = (props) => {
             <div style={{fontSize: "14px"}}> {props.post.minutes_to_read} min </div>
         </BottomRow>
         <BottomRow>
-            <Button onClick={() => handleEdit(props.post)}>
+            <Button style={{backgroundColor: 'blue'}} onClick={() => handleEdit(props.post)}>
               <FontAwesomeIcon icon={faEdit} /> Edit
             </Button>
-            <Button isDelete onClick={() => handleDelete(props.post)}>
+            <Button style={{backgroundColor: '#e81e1e'}} onClick={() => handleDelete(props.post)}>
               <FontAwesomeIcon icon={faTrash} /> Delete
             </Button>
         </BottomRow>

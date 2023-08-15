@@ -6,6 +6,7 @@ import { editPost, postPost } from '../service/posts_service';
 import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { currentUser } from '../service/current_user';
+import { userProfile } from '../service/user_profile';
 
 const FormContainer = styled.form`
   max-width: 500px;
@@ -70,6 +71,7 @@ const NewBlog = () => {
   });
   const [isEdit, setIsEdit] = useState(false);
   const [user, setUser] = useState("");
+  const [profile, setProfile] = useState([]);
 
   const navigate = useNavigate();
   const data = useLocation();
@@ -77,8 +79,12 @@ const NewBlog = () => {
   async function fetchUser() {
     setUser(await currentUser());
   }
+  async function fetchProfile() {
+    setProfile(await userProfile());
+  }
   useEffect(() => {
     fetchUser();
+    fetchProfile();
   }, [])
 
   useEffect(() => {
@@ -112,7 +118,7 @@ const NewBlog = () => {
       editPost(formData);
     } else {
       let newPost = formData;
-      newPost.author = user.email;
+      newPost.author = profile.name;
       newPost.user_id = user.id;
       setFormData(newPost);
       console.log(formData);
