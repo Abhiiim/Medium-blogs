@@ -86,22 +86,25 @@ function App () {
     useEffect(() => {
         fetchPosts();
         fetchTopPosts();
-        fetchUser();
-        if (user.data) {
+        fetchUser();   
+    }, [])
+
+    useEffect (() => {
+        if (user.id) {
             setIsLoggedIn(true);
         }
-    }, [])
+    })
 
     const seeBlogDetails = (data) => {
         navigate("/author/title", {state: data});
     }
 
-    console.log(isLoggedIn);
-    console.log(user.data);
+    // console.log(isLoggedIn);
+    // console.log(user);
 
     return (
         <div className="container">
-            <Navbar setSearchedPosts={setPosts} isLoggedIn={isLoggedIn} />
+            <Navbar setSearchedPosts={setPosts} isLoggedIn={isLoggedIn} user={user} />
             <ParentDiv>
                 <LeftDiv>
                     <Filter setFilteredPosts={setPosts}/>

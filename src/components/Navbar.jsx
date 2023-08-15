@@ -126,7 +126,7 @@ const LogoutButton = styled.button`
   cursor: pointer;
 `;
 
-const Navbar = ({setSearchedPosts, isLoggedIn}) => {
+const Navbar = ({setSearchedPosts, isLoggedIn, user}) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -150,6 +150,10 @@ const Navbar = ({setSearchedPosts, isLoggedIn}) => {
     navigate("/login");
   }
 
+  function handleProfile () {
+    navigate("/user/profile", {state: {user: user, isLoggedIn: isLoggedIn}});
+  }
+
   return (
     <Nav>
       <Logo>Blogs</Logo>
@@ -170,10 +174,10 @@ const Navbar = ({setSearchedPosts, isLoggedIn}) => {
         <NavigationItem>
           <ProfileIcon onClick={handleProfileClick}>U</ProfileIcon>
           <DropdownMenu visible={isDropdownVisible}>
-            <NavLink to="/user/profile" style={{color: "#000"}}>Profile</NavLink>
-            <NavLink to="/login" style={{color: "#000"}}>Login</NavLink>
-            <NavLink to="/signup" style={{color: "#000"}}>Signup</NavLink>
-            <NavLink to="/login" style={{color: "#000"}}>Logout</NavLink>
+            {isLoggedIn && <LogoutButton onClick={() => handleProfile()} style={{color: "#000"}}>Profile</LogoutButton>}
+            {!isLoggedIn && <NavLink to="/login" style={{color: "#000"}}>Login</NavLink>}
+            {!isLoggedIn && <NavLink to="/signup" style={{color: "#000"}}>Signup</NavLink>}
+            {isLoggedIn && <NavLink style={{color: "#000"}} onClick={handleLogout}>Logout</NavLink>}
           </DropdownMenu>
         </NavigationItem>
       </NavigationItems>

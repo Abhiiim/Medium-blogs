@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import Post from './Post';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { getPost } from '../service/posts_service';
@@ -97,8 +97,11 @@ const Profile = () => {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate ()
 
+  const data = useLocation();
+  // console.log(data);
+
   async function fetchPosts() {
-    const params = {author: "Abhishek"};
+    const params = {email: "Abhishek"};
     setPosts(await getPost(params));
   }
   useEffect(() => {
