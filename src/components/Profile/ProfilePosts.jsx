@@ -29,12 +29,12 @@ const ProfileNav = styled.div`
 `;
 
 
-const ProfilePosts = () => {
+const ProfilePosts = ({user, profile}) => {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate()
 
   async function fetchPosts() {
-    const params = { author: "Abhishek" };
+    const params = {author: profile.name}
     const pst = await getPost(params);
     setPosts(pst || []);
   }
@@ -42,14 +42,22 @@ const ProfilePosts = () => {
   useEffect(() => {
     fetchPosts();
   }, [])
+
+  let profilePosts = [];
+  function getProfilePosts () {
+    posts.forEach((item) => {
+      if (item.user_id === user.id) {
+        profilePosts.push(item);
+      }
+    })
+  }
+
+  // console.log(posts);
+
   return (
     <LeftPart>
       <LeftContent >
-        <ProfileName>Abhishek</ProfileName>
-        <ProfileNav>
-          <Link to="">Home</Link>
-          <Link to="about">About</Link>
-        </ProfileNav>
+        <ProfileName>{profile.name}</ProfileName>
         <hr />
         {posts.length && posts.map((item, index) => {
           return (

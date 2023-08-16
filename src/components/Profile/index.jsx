@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Navbar from '../Navbar';
-import { Routes, Route, useNavigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Routes, Route, useNavigate, createBrowserRouter, RouterProvider, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { currentUser } from '../../service/current_user';
@@ -87,12 +87,12 @@ const Div3 = styled.div`
 `;
 
 const Profile = () => {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState([]);
   const navigate = useNavigate()
   const [profile, setProfile] = useState([]);
 
-  async function fetchProfile() {
-    setProfile(await userProfile(user));
+  async function fetchProfile(currUser) {
+    setProfile(await userProfile(currUser));
   }
 
   async function fetchUser() {
@@ -100,7 +100,8 @@ const Profile = () => {
   }
   useEffect(() => {
     fetchUser()
-    fetchProfile();
+    fetchProfile(user);
+    // setProfile(userProfile(user));
   }, [])
 
 
@@ -112,6 +113,8 @@ const Profile = () => {
 
   }
 
+  // console.log(profile);
+
   function showSavedPosts() {
     navigate("/user/profile/saved");
   }
@@ -121,7 +124,7 @@ const Profile = () => {
       <Navbar />
       <ProfileContainer>
         <Routes>
-          <Route path="/" element={<ProfilePosts />}></Route>
+          <Route path="/" element={<ProfilePosts user={user} profile={profile} />}></Route>
           <Route path="/saved" element={<SavedPosts />}></Route>
         </Routes>
         <ProfileDetails>
@@ -145,7 +148,8 @@ const Profile = () => {
             <FollowButton onClick={handleFollow}>Follow</FollowButton>
           </ProfileInfo>
           <OtherDetails>
-            <Div3 onClick={showSavedPosts}>Saved Post</Div3>
+            <Link to="/user/profile">Home</Link>
+            <Link to="/user/profile/saved">Saved Post</Link>
             <Div3>Lists</Div3>
           </OtherDetails>
         </ProfileDetails>
