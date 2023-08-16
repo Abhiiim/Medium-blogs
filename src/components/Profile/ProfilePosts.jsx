@@ -34,8 +34,8 @@ const ProfilePosts = ({user, profile}) => {
   const navigate = useNavigate()
 
   async function fetchPosts() {
-    const params = {author: profile.name}
-    const pst = await getPost(params);
+    // const params = {author: profile.name}
+    const pst = await getPost();
     setPosts(pst || []);
   }
 
@@ -48,9 +48,12 @@ const ProfilePosts = ({user, profile}) => {
     posts.forEach((item) => {
       if (item.user_id === user.id) {
         profilePosts.push(item);
+        // console.log(user.id, item.user_id);
       }
     })
   }
+
+  getProfilePosts();
 
   // console.log(posts);
 
@@ -59,7 +62,7 @@ const ProfilePosts = ({user, profile}) => {
       <LeftContent >
         <ProfileName>{profile.name}</ProfileName>
         <hr />
-        {posts.length && posts.map((item, index) => {
+        {profilePosts.length && profilePosts.map((item, index) => {
           return (
             <Post key={index} post={item} />
           )

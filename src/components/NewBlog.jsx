@@ -129,6 +129,10 @@ const NewBlog = () => {
     navigate("/")
   };
 
+  useEffect (() => {
+    localStorage.setItem("drafts", JSON.stringify(drafts));
+  }, [drafts])
+
   function handleDraft(e) {
     e.preventDefault();
     let newPost = formData;
@@ -141,14 +145,11 @@ const NewBlog = () => {
       post: formData
     }
     setDrafts([...drafts, newDraft]);
-    // navigate("/");
+    // localStorage.setItem("drafts", JSON.stringify(drafts));
+    navigate("/");
   }
 
-  useEffect (() => {
-    localStorage.setItem("drafts", JSON.stringify(drafts));
-  }, [drafts])
-
-  console.log(drafts);
+  // console.log(drafts);
 
   return (
     <div>
