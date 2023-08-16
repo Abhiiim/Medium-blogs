@@ -21,6 +21,7 @@ const Logo = styled.div`
   color: #fff;
   font-size: 24px;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 const NavigationItems = styled.ul`
@@ -170,9 +171,17 @@ const Navbar = ({ setSearchedPosts}) => {
     navigate("/user/profile");
   }
 
+  function  handleSubscription () {
+    navigate("/subscription")
+  }
+
+  function goHome () {
+    navigate("/");
+  }
+
   return (
     <Nav>
-      <Logo>Blogs</Logo>
+      <Logo onClick={goHome}>Blogs</Logo>
       <SearchBar type="text" placeholder="Search..." onChange={handleChange} />
       <NavigationItems>
         {isLoggedIn && <NavigationItem>
@@ -196,6 +205,9 @@ const Navbar = ({ setSearchedPosts}) => {
             {isLoggedIn && <NavLink style={{ color: "#000" }} onClick={handleLogout}>Logout</NavLink>}
           </DropdownMenu>
         </NavigationItem>
+        {isLoggedIn && <NavigationItem>
+          <LogoutButton onClick={handleSubscription}>Subscription</LogoutButton>
+        </NavigationItem>}
       </NavigationItems>
     </Nav>
   );

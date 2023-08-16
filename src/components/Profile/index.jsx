@@ -136,7 +136,7 @@ const Profile = () => {
             <p>Bio: {profile.bio}</p>
             <div>Interested Topics:</div>
               {profile.interested_topics && profile.interested_topics.map((val) => (
-                <div>val</div>
+                <div>{val}</div>
               ))}
             <Button onClick={() => editProfile()}>
               <FontAwesomeIcon icon={faEdit} /> Create Profile

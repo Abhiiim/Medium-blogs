@@ -9,6 +9,7 @@ import NewBlog from './components/NewBlog';
 import ShowPost from './components/ShowPost';
 import Profile from './components/Profile/index.jsx';
 import EditProfile from './components/EditProfile';
+import Subscription from './components/Subscription';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/user/edit_profile",
     element: <EditProfile />
+  },
+  {
+    path: "/subscription",
+    element: <Subscription />
   },
 ]);
 

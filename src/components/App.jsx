@@ -5,6 +5,7 @@ import Filter from "./Filter";
 import styled from "styled-components";
 import { getPost } from "../service/posts_service";
 import { getTopPosts } from "../service/top_posts";
+import { getRecPosts } from "../service/rec_posts";
 import { useNavigate } from "react-router-dom";
 import { currentUser } from "../service/current_user";
 
@@ -65,6 +66,7 @@ const Div1 = styled.div`
 function App () {
     const [posts, setPosts] = useState([]);
     const [topPosts, setTopPosts] = useState([]);
+    const [recPosts, setRecPosts] = useState([]);
     const [user, setUser] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
@@ -79,6 +81,11 @@ function App () {
         setTopPosts(data || []);
     }
 
+    async function fetchRecPosts(){
+        const data = await getRecPosts();
+        setRecPosts(data || []);
+    }
+
     async function fetchUser(){
         setUser(await currentUser());
     }
@@ -87,6 +94,7 @@ function App () {
         fetchPosts();
         fetchTopPosts();
         fetchUser();   
+        fetchRecPosts();
     }, [])
 
     useEffect (() => {
@@ -100,7 +108,7 @@ function App () {
     }
 
     // console.log(isLoggedIn);
-    // console.log(user);
+    // console.log(recPosts);
 
     return (
         <div className="container">
@@ -138,10 +146,16 @@ function App () {
                     <TopPost>
                         <h3 style={{marginTop: "0"}}>Recommended Posts</h3>
                         <div>
-                            <Div1>
-                                <div style={{fontSize: "14px"}}>Abhishek</div>
-                                <h4 style={{marginTop: "10px"}}>6 Best Practices For Creating High-Quality React Apps</h4>
-                            </Div1>
+                            { recPosts.length &&
+                                recPosts.map((post, index) => {
+                                    return (
+                                        <Div1 onClick={() => seeBlogDetails(post)} key={index}>
+                                            <div style={{fontSize: "14px"}}>{post.author}</div>
+                                            <h4 style={{marginTop: "10px"}}>{post.title}</h4>
+                                        </Div1>
+                                    )
+                                })
+                            }
                         </div>
                     </TopPost>
                     {/* <Line></Line> */}
