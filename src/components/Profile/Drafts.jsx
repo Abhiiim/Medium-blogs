@@ -28,7 +28,7 @@ const ProfileName = styled.h1`
     margin-left: 20px;
 `;
 
-const SavedPosts = () => {
+const Drafts = () => {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
 
@@ -45,30 +45,26 @@ const SavedPosts = () => {
     fetchPosts();
   }, [])
 
-  const savedPost = JSON.parse(localStorage.getItem("saved_posts")) || [];
-  // console.log(posts, savedPost, user);
+  const drafts = JSON.parse(localStorage.getItem("drafts")) || [];
+//   console.log(drafts);
 
-  let currentSavedPost = [];
-  function retrieveSavedPost () {
-    savedPost.forEach((item) => {
+  let currentDraft = [];
+  function retrieveDraft () {
+    drafts.forEach((item) => {
       if (item.userId === user.id) {
-        posts.forEach((post) => {
-          if (post.id === item.articleId) {
-            currentSavedPost.push(post);
-          }
-        })
+        currentDraft.push(item.post);
       }
     })
   }
-  retrieveSavedPost();
+  retrieveDraft();
 
-  console.log(currentSavedPost);
+//   console.log(currentDraft);
 
   return (
     <LeftPart>
       <LeftContent >
-        <ProfileName>Saved Posts</ProfileName>
-        {currentSavedPost.length && currentSavedPost.map((item, index) => {
+        <ProfileName>Drafts</ProfileName>
+        {currentDraft.length && currentDraft.map((item, index) => {
           return (
             <Post key={index} post={item} />
           )
@@ -79,4 +75,4 @@ const SavedPosts = () => {
   );
 };
 
-export default SavedPosts;
+export default Drafts;

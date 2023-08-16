@@ -8,6 +8,7 @@ import { currentUser } from '../../service/current_user';
 import { userProfile } from '../../service/user_profile';
 import SavedPosts from './SavedPosts';
 import ProfilePosts from './ProfilePosts';
+import Drafts from './Drafts';
 
 const ProfileContainer = styled.div`
     display: flex;
@@ -126,6 +127,7 @@ const Profile = () => {
         <Routes>
           <Route path="/" element={<ProfilePosts user={user} profile={profile} />}></Route>
           <Route path="/saved" element={<SavedPosts />}></Route>
+          <Route path="/draft" element={<Drafts />}></Route>
         </Routes>
         <ProfileDetails>
           <ProfilePicture>
@@ -150,6 +152,7 @@ const Profile = () => {
           <OtherDetails>
             <Link to="/user/profile">Home</Link>
             <Link to="/user/profile/saved">Saved Post</Link>
+            <Link to="/user/profile/draft">Drafts</Link>
             <Div3>Lists</Div3>
           </OtherDetails>
         </ProfileDetails>

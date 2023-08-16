@@ -72,6 +72,9 @@ const NewBlog = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [user, setUser] = useState("");
   const [profile, setProfile] = useState([]);
+  const [drafts, setDrafts] = useState(() => {
+    return JSON.parse(localStorage.getItem("drafts")) || []
+  })
 
   const navigate = useNavigate();
   const data = useLocation();
@@ -108,8 +111,7 @@ const NewBlog = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    // You can process the image file here (e.g., upload to server, preview, etc.)
-    console.log(file);
+    // console.log(file);
   };
 
   const handleSubmit = (e) => {
@@ -121,11 +123,32 @@ const NewBlog = () => {
       newPost.author = profile.name;
       newPost.user_id = user.id;
       setFormData(newPost);
-      console.log(formData);
+      // console.log(formData);
       postPost(formData);
     }
     navigate("/")
   };
+
+  function handleDraft(e) {
+    e.preventDefault();
+    let newPost = formData;
+    newPost.author = profile.name;
+    newPost.user_id = user.id;
+    setFormData(newPost);
+
+    const newDraft = {
+      userId: user.id,
+      post: formData
+    }
+    setDrafts([...drafts, newDraft]);
+    // navigate("/");
+  }
+
+  useEffect (() => {
+    localStorage.setItem("drafts", JSON.stringify(drafts));
+  }, [drafts])
+
+  console.log(drafts);
 
   return (
     <div>
@@ -174,6 +197,7 @@ const NewBlog = () => {
           {/* <ImageLabel htmlFor="image">Choose Image</ImageLabel> */}
         </FormField>
         <Button type="submit" style={{ fontSize: '16px' }}>Add Blog</Button>
+        <Button type="button" onClick={handleDraft} style={{ fontSize: '16px', marginTop: "20px" }}>Add to Draft</Button>
       </FormContainer>
     </div>
   );
