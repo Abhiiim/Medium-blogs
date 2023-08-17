@@ -13,6 +13,16 @@ const StyledContainer = styled.div`
     align-items: center;
 `;
 
+const OpenMenu = styled.div`
+    cursor: pointer;
+    margin: 20px 0;
+    text-decoration: underline;
+    
+    &:hover {
+        font-size: 18px;
+    }
+`;
+
 const overLay = {
     display: 'flex',
     justifyContent: 'center',
@@ -29,7 +39,7 @@ const contentCSS = {
     backgroundColor: 'transparent',
 }
 
-function SingleListItem({ list }) {
+function SingleListItem({ list, userId }) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const openModal = () => {
@@ -42,7 +52,7 @@ function SingleListItem({ list }) {
 
     return (
         <>
-            <div onClick={openModal}>{list.listName}</div>
+            <OpenMenu onClick={openModal}>{list.listName}</OpenMenu>
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
@@ -50,7 +60,7 @@ function SingleListItem({ list }) {
                 style={{ overlay: overLay, content: contentCSS }}
             >
                 <StyledContainer >
-                    <UserList listId={list.listId} />
+                    <UserList listId={list.listId} userId={userId} />
                 </StyledContainer>
             </Modal>
         </>

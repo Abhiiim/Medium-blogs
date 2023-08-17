@@ -9,12 +9,12 @@ const Div1 = styled.div`
     cursor: pointer;
 `;
 
-function UserList({listId}) {
+function UserList({ listId, userId }) {
     const navigate = useNavigate();
     const listItems = JSON.parse(localStorage.getItem("list_items"))
     let currListItems = [];
     listItems.forEach(item => {
-        if (item.listId === listId) {
+        if (item.listId === listId && item.userId === userId) {
             currListItems.push(item.post);
         }
     })
@@ -27,7 +27,7 @@ function UserList({listId}) {
 
     return (
         <div>
-            {currListItems.length &&
+            {currListItems.length ?
                 currListItems.map((post, index) => {
                     return (
                         <Div1 onClick={() => seeBlogDetails(post)} key={index}>
@@ -36,6 +36,7 @@ function UserList({listId}) {
                         </Div1>
                     )
                 })
+                : <div> No List Items </div>
             }
         </div>
     )

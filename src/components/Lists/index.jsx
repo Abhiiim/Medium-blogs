@@ -25,6 +25,8 @@ const ProfileName = styled.h1`
 const CreateList = styled.div`
     display: flex;
     gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid black;
 `;
 
 function ListView() {
