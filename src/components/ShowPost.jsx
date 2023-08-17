@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import styled from 'styled-components';
+import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment, faSave, faShare } from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router-dom';
 import { currentUser } from '../service/current_user';
+import PopupList from './Lists/PopupList';
 
 const ContainerDiv = styled.div`
     display: flex;
@@ -57,9 +59,41 @@ const MiddleDiv = styled.div`
 const MiddleActivity = styled.div`
     display: flex;
     gap: 20px;
+    align-items: center;
 `;
 
-// const Content = styled.div``
+const AddList = styled.div`
+    font-size: 24px;
+    border: none;
+    background: none;
+    cursor: pointer;
+`;
+
+const StyledContainer = styled.div`
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const overLay = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+}
+
+const contentCSS = {
+    position: 'static',
+    borderRadius: 'none',
+    padding: 0,
+    border: 'none',
+    boxShadow: 'none',
+    backgroundColor: 'transparent',
+}
 
 function ShowPost() {
     const [comment, setComment] = useState("");
@@ -71,12 +105,12 @@ function ShowPost() {
         return JSON.parse(localStorage.getItem("saved_posts")) || []
     })
 
-    async function fetchUser(){
+    async function fetchUser() {
         setUser(await currentUser());
     }
 
     useEffect(() => {
-        fetchUser();   
+        fetchUser();
     }, [])
 
     const data = useLocation();
@@ -98,7 +132,7 @@ function ShowPost() {
     }
 
     let cnt = 0;
-    function countComments () {
+    function countComments() {
         comments.forEach(item => {
             if (item.articleId === data.state.id) cnt++;
         })
@@ -109,10 +143,10 @@ function ShowPost() {
         localStorage.setItem("comments", JSON.stringify(comments));
     }, [comments])
 
-    function handleSave () {
+    function handleSave() {
         let saved = JSON.parse(localStorage.getItem("saved_posts")) || [];
         const isAlreadySaved = saved.some((item) => item.userId === user.id && item.articleId === data.state.id);
-        if (!isAlreadySaved) { 
+        if (!isAlreadySaved) {
             const newSave = {
                 userId: user.id,
                 articleId: data.state.id,
@@ -125,7 +159,17 @@ function ShowPost() {
         localStorage.setItem("saved_posts", JSON.stringify(savedPosts));
     }, [savedPosts])
 
-    console.log(savedPosts);
+    // console.log(savedPosts);
+
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const openModal = () => {
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
 
     return (
         <div>
@@ -149,12 +193,23 @@ function ShowPost() {
                     <MiddleActivity>
                         <FontAwesomeIcon icon={faThumbsUp} />
                         <span><FontAwesomeIcon icon={faComment} />
-                            <span style={{fontSize: "12px"}}> {cnt}</span>
+                            <span style={{ fontSize: "12px" }}> {cnt}</span>
                         </span>
                     </MiddleActivity>
                     <MiddleActivity>
                         <FontAwesomeIcon onClick={handleSave} icon={faSave} />
-                        <FontAwesomeIcon icon={faShare} />
+                        <AddList onClick={openModal}>+</AddList>
+                        <Modal
+                            isOpen={modalIsOpen}
+                            onRequestClose={closeModal}
+                            contentLabel="Menu"
+                            style={{ overlay: overLay, content: contentCSS }}
+                        >
+                            <StyledContainer>
+                                <PopupList />
+                                <button style={{marginTop: "10px"}} onClick={closeModal}>Close</button>
+                            </StyledContainer>
+                        </Modal>
                     </MiddleActivity>
                 </MiddleDiv>
                 <div>
@@ -165,7 +220,7 @@ function ShowPost() {
                     <input type="text" onChange={handleComment} />
                     <button onClick={addComment}>Add</button>
                 </div>
-                { comments.length && comments.map((item, index) => {
+                {comments.length && comments.map((item, index) => {
                     if (item.articleId == data.state.id) {
                         return <div key={index}>{item.comment}</div>
                     }

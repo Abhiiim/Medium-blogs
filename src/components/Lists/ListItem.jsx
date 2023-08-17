@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { currentUser } from '../../service/current_user';
 
 function ListItem({userId}) {
     const [lists, setLists] = useState([]);
@@ -20,7 +19,7 @@ function ListItem({userId}) {
     }
     getUserList();
 
-    console.log(lists, currUserList);
+    // console.log(lists, currUserList);
 
     return (
         <div>
