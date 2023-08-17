@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components';
 import ListItem from './ListItem';
 import { currentUser } from '../../service/current_user';
-import { useNavigate } from 'react-router-dom';
+import { createRoutesFromChildren, useNavigate } from 'react-router-dom';
 
 const LeftPart = styled.div`
     flex: 3;
@@ -30,15 +30,14 @@ const CreateList = styled.div`
 function ListView() {
     const [listName, setListName] = useState("");
     const [user, setUser] = useState("");
-    const lists = JSON.parse(localStorage.getItem("lists")) || [];
     const navigate = useNavigate();
 
-    async function fetchUser(){
+    async function fetchUser() {
         setUser(await currentUser());
     }
 
     useEffect(() => {
-        fetchUser();  
+        fetchUser();
     }, [])
 
     const handleList = (e) => {
@@ -47,11 +46,17 @@ function ListView() {
 
     const createList = () => {
         if (listName.trim() !== "") {
+            const lists = JSON.parse(localStorage.getItem("lists")) || [];
+            let currId = JSON.parse(localStorage.getItem("list_id")) || 0;
+            currId = parseInt(currId);
             lists.push({
-                listId: user.id,
+                listId: currId,
+                userId: user.id,
                 listName: listName
             });
+            currId++;
             localStorage.setItem("lists", JSON.stringify(lists));
+            localStorage.setItem("list_id", JSON.stringify(currId));
         }
     }
 

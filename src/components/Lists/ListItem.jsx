@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import SingleListItem from './SingleListItem';
 
 function ListItem({userId}) {
     const [lists, setLists] = useState([]);
@@ -12,19 +13,19 @@ function ListItem({userId}) {
     let currUserList = [];
     const getUserList = () => {
         lists.forEach(list => {
-            if (list.listId === userId) {
+            if (list.userId === userId) {
                 currUserList.push(list);
             }
         })
     }
     getUserList();
 
-    // console.log(lists, currUserList);
+    // console.log(lists, userId);
 
     return (
         <div>
             {currUserList.length && currUserList.map((list, index) => {
-                return <div key = {index}>{list.listName}</div>
+                return <SingleListItem list={list} />
             })}
         </div>
     )

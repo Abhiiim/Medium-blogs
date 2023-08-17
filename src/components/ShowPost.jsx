@@ -206,7 +206,7 @@ function ShowPost() {
                             style={{ overlay: overLay, content: contentCSS }}
                         >
                             <StyledContainer>
-                                <PopupList />
+                                <PopupList post={data.state} />
                                 <button style={{marginTop: "10px"}} onClick={closeModal}>Close</button>
                             </StyledContainer>
                         </Modal>

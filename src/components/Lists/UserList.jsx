@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 const Div1 = styled.div`
@@ -8,13 +9,26 @@ const Div1 = styled.div`
     cursor: pointer;
 `;
 
-function UserList() {
-    const lists = JSON.parse(localStorage.getItem("lists"))
+function UserList({listId}) {
+    const navigate = useNavigate();
+    const listItems = JSON.parse(localStorage.getItem("list_items"))
+    let currListItems = [];
+    listItems.forEach(item => {
+        if (item.listId === listId) {
+            currListItems.push(item.post);
+        }
+    })
+
+    console.log(listId);
+
+    const seeBlogDetails = (data) => {
+        navigate("/author/title", {state: data});
+    }
 
     return (
         <div>
-            {/* {lists.length &&
-                lists.map((post, index) => {
+            {currListItems.length &&
+                currListItems.map((post, index) => {
                     return (
                         <Div1 onClick={() => seeBlogDetails(post)} key={index}>
                             <div style={{ fontSize: "14px" }}>{post.author}</div>
@@ -22,8 +36,7 @@ function UserList() {
                         </Div1>
                     )
                 })
-            } */}
-            UserList
+            }
         </div>
     )
 }
