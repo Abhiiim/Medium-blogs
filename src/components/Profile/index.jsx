@@ -9,6 +9,7 @@ import { userProfile } from '../../service/user_profile';
 import SavedPosts from './SavedPosts';
 import ProfilePosts from './ProfilePosts';
 import Drafts from './Drafts';
+import ListView from '../Lists/index';
 
 const ProfileContainer = styled.div`
     display: flex;
@@ -128,6 +129,7 @@ const Profile = () => {
           <Route path="/" element={<ProfilePosts user={user} profile={profile} />}></Route>
           <Route path="/saved" element={<SavedPosts />}></Route>
           <Route path="/draft" element={<Drafts />}></Route>
+          <Route path="/lists" element={<ListView />}></Route>
         </Routes>
         <ProfileDetails>
           <ProfilePicture>
@@ -153,7 +155,7 @@ const Profile = () => {
             <Link to="/user/profile">Home</Link>
             <Link to="/user/profile/saved">Saved Post</Link>
             <Link to="/user/profile/draft">Drafts</Link>
-            <Div3>Lists</Div3>
+            <Link to="/user/profile/lists">Lists</Link>
           </OtherDetails>
         </ProfileDetails>
       </ProfileContainer>
