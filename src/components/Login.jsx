@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {Container, InputForm, Input, Button} from "./Style";
 import { login } from '../service/login';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const Login = () => {
 
@@ -23,6 +24,8 @@ const Login = () => {
   };
 
   return (
+    <>
+    <Navbar />
     <Container>
       <InputForm onSubmit={handleSubmit}>
         <h2>Login</h2>
@@ -41,6 +44,7 @@ const Login = () => {
         <Button type="submit">Login</Button>
       </InputForm>
     </Container>
+    </>
   );
 };
 

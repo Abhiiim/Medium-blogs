@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {Container, InputForm, Input, Button} from "./Style";
 import { register } from '../service/register';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -27,6 +28,8 @@ const Signup = () => {
   };
 
   return (
+    <>
+    <Navbar />
     <Container>
       <InputForm onSubmit={handleSubmit}>
         <h2>Sign Up</h2>
@@ -57,6 +60,7 @@ const Signup = () => {
         <Button type="submit">Sign Up</Button>
       </InputForm>
     </Container>
+    </>
   );
 };
 

@@ -107,7 +107,7 @@ function EditProfile() {
     }
     // console.log(interests);
     // create_profile(data);
-    navigate("/user/profile", {state: data});
+    // navigate("/user/profile", {state: data});
   };
 
   return (

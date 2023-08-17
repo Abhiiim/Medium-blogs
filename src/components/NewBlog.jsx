@@ -129,10 +129,6 @@ const NewBlog = () => {
     navigate("/")
   };
 
-  useEffect (() => {
-    localStorage.setItem("drafts", JSON.stringify(drafts));
-  }, [drafts])
-
   function handleDraft(e) {
     e.preventDefault();
     let newPost = formData;
@@ -144,10 +140,16 @@ const NewBlog = () => {
       userId: user.id,
       post: formData
     }
-    setDrafts([...drafts, newDraft]);
-    // localStorage.setItem("drafts", JSON.stringify(drafts));
+    // setDrafts([...drafts, newDraft]);
+    let currentDraft = JSON.parse(localStorage.getItem("drafts")) || [];
+    currentDraft.push(newDraft);
+    localStorage.setItem("drafts", JSON.stringify(currentDraft));
     navigate("/");
   }
+
+  // useEffect (() => {
+  //   localStorage.setItem("drafts", JSON.stringify(drafts));
+  // }, [drafts])
 
   // console.log(drafts);
 

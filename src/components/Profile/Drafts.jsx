@@ -46,7 +46,7 @@ const Drafts = () => {
   }, [])
 
   const drafts = JSON.parse(localStorage.getItem("drafts")) || [];
-//   console.log(drafts);
+  // console.log(drafts);
 
   let currentDraft = [];
   function retrieveDraft () {
@@ -58,7 +58,7 @@ const Drafts = () => {
   }
   retrieveDraft();
 
-//   console.log(currentDraft);
+  // console.log(currentDraft, user);
 
   return (
     <LeftPart>
