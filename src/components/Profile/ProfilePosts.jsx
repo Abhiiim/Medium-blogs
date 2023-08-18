@@ -52,7 +52,6 @@ const ProfilePosts = ({user, profile}) => {
       }
     })
   }
-
   getProfilePosts();
 
   // console.log(posts);

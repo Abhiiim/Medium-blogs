@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment, faSave, faShare } from '@fortawesome/free-solid-svg-icons';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { currentUser } from '../service/current_user';
 import PopupList from './Lists/PopupList';
 
@@ -79,6 +79,10 @@ const StyledContainer = styled.div`
     align-items: center;
 `;
 
+const AuthorName = styled.div`
+    cursor: pointer;
+`;
+
 const overLay = {
     display: 'flex',
     justifyContent: 'center',
@@ -104,6 +108,7 @@ function ShowPost() {
     const [savedPosts, setSavedPosts] = useState(() => {
         return JSON.parse(localStorage.getItem("saved_posts")) || []
     })
+    const navigate = useNavigate();
 
     async function fetchUser() {
         setUser(await currentUser());
@@ -114,6 +119,7 @@ function ShowPost() {
     }, [])
 
     const data = useLocation();
+    // console.log(data.state);
 
     const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const datetime = new Date(data.state.created_at);
@@ -162,14 +168,16 @@ function ShowPost() {
     // console.log(savedPosts);
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
-
     const openModal = () => {
         setModalIsOpen(true);
     };
-
     const closeModal = () => {
         setModalIsOpen(false);
     };
+
+    const authorProfile = () => {
+        navigate("/author/profile", {state: data.state});
+    }
 
     return (
         <div>
@@ -180,7 +188,7 @@ function ShowPost() {
                     <Img src="https://via.placeholder.com/20" alt="" />
                     <Div1>
                         <Div2 style={{ fontSize: "14px" }}>
-                            <div>{data.state.author}</div>
+                            <AuthorName onClick={() => authorProfile(data.state)}>{data.state.author}</AuthorName>
                             <div>Follow</div>
                         </Div2>
                         <Div2 style={{ fontSize: "12px" }}>

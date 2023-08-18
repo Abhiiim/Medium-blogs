@@ -93,18 +93,21 @@ const Profile = () => {
   const navigate = useNavigate()
   const [profile, setProfile] = useState([]);
 
-  async function fetchProfile(currUser) {
-    setProfile(await userProfile(currUser));
-  }
-
   async function fetchUser() {
     setUser(await currentUser());
   }
   useEffect(() => {
     fetchUser()
-    fetchProfile(user);
-    // setProfile(userProfile(user));
   }, [])
+
+  async function fetchProfile() {
+    // console.log(user);
+    const url = "http://localhost:3000/profiles/12"// + user.id;
+    setProfile(await userProfile(url));
+  }
+  useEffect(() => {
+    fetchProfile();
+  })
 
 
   const editProfile = () => {

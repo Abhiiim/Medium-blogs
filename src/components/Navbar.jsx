@@ -164,7 +164,7 @@ const Navbar = ({ setSearchedPosts}) => {
 
   function handleLogout() {
     logout();
-    navigate("/login");
+    navigate("/");
   }
 
   function handleProfile() {
