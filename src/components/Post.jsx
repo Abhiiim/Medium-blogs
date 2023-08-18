@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { deletePost } from '../service/posts_service';
@@ -34,6 +34,7 @@ const TopRow = styled.div`
 const AuthorName = styled.p`
   font-weight: bold;
   margin: 0;
+  cursor: pointer;
 `;
 
 const Details = styled.div`
@@ -123,16 +124,20 @@ const Post = (props) => {
   };
 
   const seeBlogDetails = (data) => {
-    navigate("/author/title", {state: data});
+    navigate("/author/title", { state: data });
   }
 
   const handleEdit = (data) => {
-    navigate("/new-blog", {state: data});
+    navigate("/new-blog", { state: data });
   }
 
   const handleDelete = (data) => {
-    const params = {id: data.id};
+    const params = { id: data.id };
     deletePost(params);
+  }
+
+  const authorProfile = () => {
+    navigate("/author/profile", { state: props.post });
   }
 
   const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -143,24 +148,24 @@ const Post = (props) => {
     <Container>
       <LeftColumn>
         <TopRow>
-            <AuthorName> {props.post.author} </AuthorName>
-            <div style={{fontSize: "12px"}}> {date} </div>
+          <AuthorName onClick={authorProfile}>{props.post.author}</AuthorName>
+          <div style={{ fontSize: "12px" }}> {date} </div>
         </TopRow>
         <Details onClick={() => seeBlogDetails(props.post)}>
-            <Title> {props.post.title} </Title>
-            <Content ref={contentRef}> {props.post.description} </Content>
+          <Title> {props.post.title} </Title>
+          <Content ref={contentRef}> {props.post.description} </Content>
         </Details>
         <BottomRow>
-            <Tech> {props.post.topic} </Tech>
-            <div style={{fontSize: "14px"}}> {props.post.minutes_to_read} min </div>
+          <Tech> {props.post.topic} </Tech>
+          <div style={{ fontSize: "14px" }}> {props.post.minutes_to_read} min </div>
         </BottomRow>
         <BottomRow>
-            <Button style={{backgroundColor: 'blue'}} onClick={() => handleEdit(props.post)}>
-              <FontAwesomeIcon icon={faEdit} /> Edit
-            </Button>
-            <Button style={{backgroundColor: '#e81e1e'}} onClick={() => handleDelete(props.post)}>
-              <FontAwesomeIcon icon={faTrash} /> Delete
-            </Button>
+          <Button style={{ backgroundColor: 'blue' }} onClick={() => handleEdit(props.post)}>
+            <FontAwesomeIcon icon={faEdit} /> Edit
+          </Button>
+          <Button style={{ backgroundColor: '#e81e1e' }} onClick={() => handleDelete(props.post)}>
+            <FontAwesomeIcon icon={faTrash} /> Delete
+          </Button>
         </BottomRow>
       </LeftColumn>
       <RightColumn>

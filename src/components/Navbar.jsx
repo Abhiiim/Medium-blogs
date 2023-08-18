@@ -84,7 +84,7 @@ const ProfileIcon = styled.div`
 const DropdownMenu = styled.div`
   position: absolute;
   top: 60px;
-  right: 16%;
+  right: 22%;
   display: ${(props) => (props.visible ? 'flex' : 'none')};
   background-color: #fff;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);

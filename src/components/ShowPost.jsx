@@ -188,7 +188,7 @@ function ShowPost() {
                     <Img src="https://via.placeholder.com/20" alt="" />
                     <Div1>
                         <Div2 style={{ fontSize: "14px" }}>
-                            <AuthorName onClick={() => authorProfile(data.state)}>{data.state.author}</AuthorName>
+                            <AuthorName onClick={authorProfile}>{data.state.author}</AuthorName>
                             <div>Follow</div>
                         </Div2>
                         <Div2 style={{ fontSize: "12px" }}>

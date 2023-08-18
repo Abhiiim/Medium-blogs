@@ -6,6 +6,9 @@ import Post from '../Post';
 import { currentUser } from '../../service/current_user';
 import Modal from 'react-modal';
 import { userProfile } from '../../service/user_profile';
+import Navbar from '../Navbar';
+import FollowersModal from './FollowersModal';
+import FollowingModal from './FollowingModal';
 
 const Container = styled.div`
     width: 100%;
@@ -57,41 +60,6 @@ const Follow = styled.div`
     gap: 10px;
     margin-bottom: 20px;
 `;
-
-const FollowDiv = styled.div`
-    cursor: pointer;
-
-    &:hover {
-        text-decoration: underline;
-        color: blue;
-    }
-`;
-
-const StyledContainer = styled.div`
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-    min-width: 100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-
-const overLay = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-}
-
-const contentCSS = {
-    position: 'static',
-    borderRadius: 'none',
-    padding: 0,
-    border: 'none',
-    boxShadow: 'none',
-    backgroundColor: 'transparent',
-}
 
 function AuthorProfile() {
     const [posts, setPosts] = useState([]);
@@ -170,98 +138,36 @@ function AuthorProfile() {
         }
     }
 
-    let followersCount = 0, followingCount = 0;
-    let currFollowers = [], currFollowing = [];
-    const getCount = () => {
-        followers.forEach(item => {
-            if (item.userId === data.state.user_id) {
-                followersCount++;
-                currFollowers.push(item.follower)
-            }
-            if (item.followerId === data.state.user_id) {
-                followingCount++;
-                currFollowing.push(item.following);
-            }
-        })
-    }
-    getCount();
-
     useEffect(() => {
         localStorage.setItem("followers", JSON.stringify(followers));
     }, [followers.length])
 
-    console.log(followers, currFollowers, currFollowing);
-
-    const [followerModalIsOpen, setFollowerModalIsOpen] = useState(false);
-    const [followingModalIsOpen, setFollowingModalIsOpen] = useState(false);
-    const openFollowerModal = () => {
-        setFollowerModalIsOpen(true);
-    };
-    const openFollowingModal = () => {
-        setFollowingModalIsOpen(true);
-    };
-    const closeModal = () => {
-        setFollowerModalIsOpen(false);
-        setFollowingModalIsOpen(false);
-    };
+    // console.log(followers, currFollowers, currFollowing);
 
     return (
-        <Container>
-            <h1>Profile</h1>
-            <AuthorDiv>
-                <AuthorName>Name: <span style={{ fontWeight: "600" }}>{data.state.author}</span></AuthorName>
-                <Follow>
-                    <FollowDiv onClick={openFollowerModal}>Followers: {followersCount}</FollowDiv>
-                    <Modal
-                        isOpen={followerModalIsOpen}
-                        onRequestClose={closeModal}
-                        contentLabel="Menu"
-                        style={{ overlay: overLay, content: contentCSS }}
-                    >
-                        <StyledContainer>
-                            <ul style={{paddingLeft: "0", margin: "0"}}>
-                                {currFollowers.length 
-                                    ? currFollowers.map((item, index) => {
-                                        return <li key={index} style={{marginBottom: "10px"}}>{item}</li>
-                                    })
-                                    : <div>No Followers</div>
-                                }
-                            </ul>
-                            <button style={{ marginTop: "10px" }} onClick={closeModal}>Close</button>
-                        </StyledContainer>
-                    </Modal>
+        <>
+            <Navbar />
+            <Container>
 
-                    <FollowDiv onClick={openFollowingModal}>Following: {followingCount}</FollowDiv>
-                    <Modal
-                        isOpen={followingModalIsOpen}
-                        onRequestClose={closeModal}
-                        contentLabel="Menu"
-                        style={{ overlay: overLay, content: contentCSS }}
-                    >
-                        <StyledContainer>
-                            <ul style={{paddingLeft: "0", margin: "0"}}>
-                                {currFollowing.length 
-                                    ? currFollowing.map((item, index) => {
-                                        return <li key={index} style={{marginBottom: "10px"}}>{item}</li>
-                                    })
-                                    : <div>No Following</div>
-                                }
-                            </ul>
-                            <button style={{ marginTop: "10px" }} onClick={closeModal}>Close</button>
-                        </StyledContainer>
-                    </Modal>
-                </Follow>
-                <FollowButton onClick={handleFollow}>{(isFollow || isFollowed) ? "Unfollow" : "Follow"}</FollowButton>
-            </AuthorDiv>
-            <AuthorPost>
-                <h2>{data.state.author}'s Posts</h2>
-                {profilePosts.length && profilePosts.map((item, index) => {
-                    return (
-                        <Post key={index} post={item} />
-                    )
-                })}
-            </AuthorPost>
-        </Container>
+                <h1>Profile</h1>
+                <AuthorDiv>
+                    <AuthorName>Name: <span style={{ fontWeight: "600" }}>{data.state.author}</span></AuthorName>
+                    <Follow>
+                        <FollowersModal userId={data.state.user_id} />
+                        <FollowingModal userId={data.state.user_id} />
+                    </Follow>
+                    <FollowButton onClick={handleFollow}>{(isFollow || isFollowed) ? "Unfollow" : "Follow"}</FollowButton>
+                </AuthorDiv>
+                <AuthorPost>
+                    <h2>{data.state.author}'s Posts</h2>
+                    {profilePosts.length && profilePosts.map((item, index) => {
+                        return (
+                            <Post key={index} post={item} />
+                        )
+                    })}
+                </AuthorPost>
+            </Container>
+        </>
     )
 }
 

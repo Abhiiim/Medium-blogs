@@ -10,6 +10,8 @@ import SavedPosts from './SavedPosts';
 import ProfilePosts from './ProfilePosts';
 import Drafts from './Drafts';
 import ListView from '../Lists/index';
+import FollowersModal from './FollowersModal';
+import FollowingModal from './FollowingModal';
 
 const ProfileContainer = styled.div`
     display: flex;
@@ -40,7 +42,8 @@ const ProfileInfo = styled.div`
 
 const Follow = styled.div`
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 const FollowButton = styled.button`
@@ -65,6 +68,7 @@ const Button = styled.button`
   padding: 5px 10px;
   cursor: pointer;
   width: 120px;
+  margin: 20px 0;
 
   &:hover {
     background-color: #3498db;
@@ -114,10 +118,6 @@ const Profile = () => {
     navigate("/user/edit_profile");
   }
 
-  const handleFollow = () => {
-
-  }
-
   // console.log(profile);
 
   function showSavedPosts() {
@@ -142,17 +142,16 @@ const Profile = () => {
             <h2>{profile.name}</h2>
             <p>Bio: {profile.bio}</p>
             <div>Interested Topics:</div>
-              {profile.interested_topics && profile.interested_topics.map((val) => (
-                <div>{val}</div>
-              ))}
+            {profile.interested_topics && profile.interested_topics.map((val) => (
+              <div>{val}</div>
+            ))}
             <Button onClick={() => editProfile()}>
               <FontAwesomeIcon icon={faEdit} /> Create Profile
             </Button>
             <Follow>
-              <p>Followers: 1000</p>
-              <p>Following: 500</p>
+              <FollowersModal userId={user.id} />
+              <FollowingModal userId={user.id} />
             </Follow>
-            <FollowButton onClick={handleFollow}>Follow</FollowButton>
           </ProfileInfo>
           <OtherDetails>
             <Link to="/user/profile">Home</Link>
