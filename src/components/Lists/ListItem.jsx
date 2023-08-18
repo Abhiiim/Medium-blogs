@@ -25,7 +25,7 @@ function ListItem({userId}) {
     return (
         <div>
             {currUserList.length && currUserList.map((list, index) => {
-                return <SingleListItem list={list} userId={userId} />
+                return <SingleListItem index={index} list={list} userId={userId} />
             })}
         </div>
     )

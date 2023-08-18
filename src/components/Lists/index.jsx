@@ -26,7 +26,7 @@ const CreateList = styled.div`
     display: flex;
     gap: 10px;
     padding-bottom: 20px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #c6b6b6;
 `;
 
 function ListView() {
