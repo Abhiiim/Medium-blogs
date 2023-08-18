@@ -102,7 +102,7 @@ const Profile = () => {
 
   async function fetchProfile() {
     // console.log(user);
-    const url = "http://localhost:3000/profiles/12"// + user.id;
+    const url = "http://localhost:3000/profiles/11"// + user.id;
     setProfile(await userProfile(url));
   }
   useEffect(() => {
