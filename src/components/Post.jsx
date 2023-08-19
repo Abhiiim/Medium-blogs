@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { deletePost } from '../service/posts_service';
+import { currentUser } from '../service/current_user';
 
 const Container = styled.div`
   display: flex;
@@ -108,8 +109,17 @@ const Button = styled.button`
 
 const Post = (props) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [user, setUser] = useState("");
   const contentRef = useRef(null);
   const navigate = useNavigate();
+
+  async function fetchUser() {
+    setUser(await currentUser());
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, [])
 
   useEffect(() => {
     if (contentRef.current) {
@@ -137,7 +147,11 @@ const Post = (props) => {
   }
 
   const authorProfile = () => {
-    navigate("/author/profile", { state: props.post });
+    const profileData = {
+      profile: props.post,
+      user: user
+    }
+    navigate("/author/profile", { state: profileData });
   }
 
   const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
