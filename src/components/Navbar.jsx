@@ -168,7 +168,7 @@ const Navbar = ({ setSearchedPosts}) => {
   }
 
   function handleProfile() {
-    navigate("/user/profile");
+    navigate("/user/profile", {state:user});
   }
 
   function  handleSubscription () {

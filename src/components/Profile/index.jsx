@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Navbar from '../Navbar';
-import { Routes, Route, useNavigate, createBrowserRouter, RouterProvider, Link } from 'react-router-dom';
+import { Routes, Route, useNavigate, createBrowserRouter, RouterProvider, Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { currentUser } from '../../service/current_user';
@@ -93,21 +93,15 @@ const Div3 = styled.div`
 `;
 
 const Profile = () => {
-  const [user, setUser] = useState([]);
   const navigate = useNavigate()
   const [profile, setProfile] = useState([]);
 
-  async function fetchUser() {
-    setUser(await currentUser());
-  }
-  useEffect(() => {
-    fetchUser()
-  }, [])
+  const userData = useLocation();
+  // console.log(userData);
 
   async function fetchProfile() {
-    // console.log(user);
-    const url = "http://localhost:3000/profiles/11"// + user.id;
-    setProfile(await userProfile(url));
+    const userId = userData.state.id;
+    setProfile(await userProfile(userId));
   }
   useEffect(() => {
     fetchProfile();
@@ -129,7 +123,7 @@ const Profile = () => {
       <Navbar />
       <ProfileContainer>
         <Routes>
-          <Route path="/" element={<ProfilePosts user={user} profile={profile} />}></Route>
+          <Route path="/" element={<ProfilePosts user={userData.state} profile={profile} />}></Route>
           <Route path="/saved" element={<SavedPosts />}></Route>
           <Route path="/draft" element={<Drafts />}></Route>
           <Route path="/lists" element={<ListView />}></Route>
@@ -149,8 +143,8 @@ const Profile = () => {
               <FontAwesomeIcon icon={faEdit} /> Create Profile
             </Button>
             <Follow>
-              <FollowersModal userId={user.id} />
-              <FollowingModal userId={user.id} />
+              <FollowersModal userId={userData.state.id} />
+              <FollowingModal userId={userData.state.id} />
             </Follow>
           </ProfileInfo>
           <OtherDetails>

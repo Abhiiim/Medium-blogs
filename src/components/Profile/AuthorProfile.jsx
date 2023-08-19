@@ -64,23 +64,18 @@ const Follow = styled.div`
 function AuthorProfile() {
     const [posts, setPosts] = useState([]);
     const data = useLocation();
-    // console.log(data.state);
-    const [user, setUser] = useState("");
+    // console.log(data);
     const [isFollow, setIsFollow] = useState(false);
     const [followers, setFollowers] = useState(() => {
         return JSON.parse(localStorage.getItem("followers")) || [];
     });
     const [profile, setProfile] = useState([]);
 
-    async function fetchUser() {
-        setUser(await currentUser());
-    }
     async function fetchProfile() {
-        const url = "http://localhost:3000/profiles/11"// + user.id;
-        setProfile(await userProfile(url));
+        const userId = data.state.user.id;
+        setProfile(await userProfile(userId));
     }
     useEffect(() => {
-        fetchUser();
         fetchProfile();
     }, [])
 
@@ -96,7 +91,7 @@ function AuthorProfile() {
     let isFollowed = false;
     const checkIsFollow = () => {
         const alreadyFollow = followers.some(item => {
-            return (item.userId === data.state.user_id && item.followerId === user.id);
+            return (item.userId === data.state.profile.user_id && item.followerId === data.state.user.id);
         })
         if (alreadyFollow) {
             isFollowed = true;
@@ -107,7 +102,7 @@ function AuthorProfile() {
     let profilePosts = [];
     function getProfilePosts() {
         posts.forEach((item) => {
-            if (item.user_id === data.state.user_id) {
+            if (item.user_id === data.state.profile.user_id) {
                 profilePosts.push(item);
             }
         })
@@ -116,21 +111,21 @@ function AuthorProfile() {
 
     const handleFollow = () => {
         const alreadyFollow = followers.some(item => {
-            return (item.userId === data.state.user_id && item.followerId === user.id);
+            return (item.userId === data.state.profile.user_id && item.followerId === data.state.user.id);
         })
         if (!alreadyFollow) {
             const follow = {
-                userId: data.state.user_id,
-                followerId: user.id,
+                userId: data.state.profile.user_id,
+                followerId: data.state.user.id,
                 follower: profile.name,
-                following: data.state.author
+                following: data.state.profile.author
             }
             setIsFollow(true);
             setFollowers([...followers, follow]);
         } else {
             let foll = followers;
             const indexToRemove = foll.findIndex(item => (
-                item.userId === data.state.user_id && item.followerId === user.id
+                item.userId === data.state.profile.user_id && item.followerId === data.state.user.id
             ));
             foll.splice(indexToRemove, 1);
             setIsFollow(false);
@@ -151,15 +146,15 @@ function AuthorProfile() {
 
                 <h1>Profile</h1>
                 <AuthorDiv>
-                    <AuthorName>Name: <span style={{ fontWeight: "600" }}>{data.state.author}</span></AuthorName>
+                    <AuthorName>Name: <span style={{ fontWeight: "600" }}>{data.state.profile.author}</span></AuthorName>
                     <Follow>
-                        <FollowersModal userId={data.state.user_id} />
-                        <FollowingModal userId={data.state.user_id} />
+                        <FollowersModal userId={data.state.profile.user_id} />
+                        <FollowingModal userId={data.state.profile.user_id} />
                     </Follow>
                     <FollowButton onClick={handleFollow}>{(isFollow || isFollowed) ? "Unfollow" : "Follow"}</FollowButton>
                 </AuthorDiv>
                 <AuthorPost>
-                    <h2>{data.state.author}'s Posts</h2>
+                    <h2>{data.state.profile.author}'s Posts</h2>
                     {profilePosts.length && profilePosts.map((item, index) => {
                         return (
                             <Post key={index} post={item} />

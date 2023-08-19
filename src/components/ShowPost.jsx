@@ -176,7 +176,11 @@ function ShowPost() {
     };
 
     const authorProfile = () => {
-        navigate("/author/profile", {state: data.state});
+        const profileData = {
+            profile: data.state,
+            user: user
+        }
+        navigate("/author/profile", {state: profileData});
     }
 
     return (
