@@ -5,10 +5,10 @@ import { styled } from 'styled-components';
 
 const FollowDiv = styled.div`
     cursor: pointer;
+    color: blue;
 
     &:hover {
         text-decoration: underline;
-        color: blue;
     }
 `;
 

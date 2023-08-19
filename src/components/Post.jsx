@@ -151,6 +151,7 @@ const Post = (props) => {
       profile: props.post,
       user: user
     }
+    // console.log(user);
     navigate("/author/profile", { state: profileData });
   }
 

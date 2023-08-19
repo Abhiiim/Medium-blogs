@@ -92,12 +92,23 @@ const Div3 = styled.div`
   }
 `;
 
+const NavButton = styled.div`
+  background-color: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const Profile = () => {
   const navigate = useNavigate()
   const [profile, setProfile] = useState([]);
 
   const userData = useLocation();
-  // console.log(userData);
+  console.log(userData);
 
   async function fetchProfile() {
     const userId = userData.state.id;
@@ -105,7 +116,7 @@ const Profile = () => {
   }
   useEffect(() => {
     fetchProfile();
-  })
+  }, [])
 
 
   const editProfile = () => {
@@ -114,8 +125,17 @@ const Profile = () => {
 
   // console.log(profile);
 
-  function showSavedPosts() {
-    navigate("/user/profile/saved");
+  function handleProfile () {
+    navigate("/user/profile", {state: userData.state})
+  }
+  function handleSavedPosts() {
+    navigate("/user/profile/saved", {state: userData.state});
+  }
+  function handleDrafts() {
+    navigate("/user/profile/draft", {state: userData.state});
+  }
+  function handleLists() {
+    navigate("/user/profile/lists", {state: userData.state});
   }
 
   return (
@@ -148,10 +168,10 @@ const Profile = () => {
             </Follow>
           </ProfileInfo>
           <OtherDetails>
-            <Link to="/user/profile">Home</Link>
-            <Link to="/user/profile/saved">Saved Post</Link>
-            <Link to="/user/profile/draft">Drafts</Link>
-            <Link to="/user/profile/lists">Lists</Link>
+            <NavButton onClick={handleProfile}>Home</NavButton>
+            <NavButton onClick={handleSavedPosts}>Saved Post</NavButton>
+            <NavButton onClick={handleDrafts}>Drafts</NavButton>
+            <NavButton onClick={handleLists}>Lists</NavButton>
           </OtherDetails>
         </ProfileDetails>
       </ProfileContainer>
