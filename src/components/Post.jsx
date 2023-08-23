@@ -175,12 +175,12 @@ const Post = (props) => {
           <div style={{ fontSize: "14px" }}> {props.post.minutes_to_read} min </div>
         </BottomRow>
         <BottomRow>
-          <Button style={{ backgroundColor: 'blue' }} onClick={() => handleEdit(props.post)}>
+          {(props.post.user_id === user.id) && <Button style={{ backgroundColor: 'blue' }} onClick={() => handleEdit(props.post)}>
             <FontAwesomeIcon icon={faEdit} /> Edit
-          </Button>
-          <Button style={{ backgroundColor: '#e81e1e' }} onClick={() => handleDelete(props.post)}>
+          </Button>}
+          {(props.post.user_id === user.id) && <Button style={{ backgroundColor: '#e81e1e' }} onClick={() => handleDelete(props.post)}>
             <FontAwesomeIcon icon={faTrash} /> Delete
-          </Button>
+          </Button>}
         </BottomRow>
       </LeftColumn>
       <RightColumn>

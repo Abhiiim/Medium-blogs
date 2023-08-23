@@ -38,7 +38,7 @@ const contentCSS = {
     backgroundColor: 'transparent',
 }
 
-function FollowingModal({userId}) {
+function FollowingModal({userId, currFollowing, followingCount}) {
     const [followingModalIsOpen, setFollowingModalIsOpen] = useState(false);
     const openFollowingModal = () => {
         setFollowingModalIsOpen(true);
@@ -47,22 +47,22 @@ function FollowingModal({userId}) {
         setFollowingModalIsOpen(false);
     };
 
-    const followers = JSON.parse(localStorage.getItem("followers")) || [];
-    let followersCount = 0, followingCount = 0;
-    let currFollowers = [], currFollowing = [];
-    const getCount = () => {
-        followers.forEach(item => {
-            if (item.userId === userId) {
-                followersCount++;
-                currFollowers.push(item.follower)
-            }
-            if (item.followerId === userId) {
-                followingCount++;
-                currFollowing.push(item.following);
-            }
-        })
-    }
-    getCount();
+    // const followers = JSON.parse(localStorage.getItem("followers")) || [];
+    // let followersCount = 0, followingCount = 0;
+    // let currFollowers = [], currFollowing = [];
+    // const getCount = () => {
+    //     followers.forEach(item => {
+    //         if (item.userId === userId) {
+    //             followersCount++;
+    //             currFollowers.push(item.follower)
+    //         }
+    //         if (item.followerId === userId) {
+    //             followingCount++;
+    //             currFollowing.push(item.following);
+    //         }
+    //     })
+    // }
+    // getCount();
 
     return (
         <>
