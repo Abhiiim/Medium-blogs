@@ -133,22 +133,6 @@ function AuthorProfile() {
         }
     }
 
-    let followersCount = 0, followingCount = 0;
-    let currFollowers = [], currFollowing = [];
-    const getCount = () => {
-        followers.forEach(item => {
-            if (item.userId === data.state.profile.user_id) {
-                followersCount++;
-                currFollowers.push(item.follower)
-            }
-            if (item.followerId === data.state.profile.user_id) {
-                followingCount++;
-                currFollowing.push(item.following);
-            }
-        })
-    }
-    getCount();
-
     useEffect(() => {
         localStorage.setItem("followers", JSON.stringify(followers));
     }, [followers])
@@ -166,13 +150,9 @@ function AuthorProfile() {
                     <Follow>
                         <FollowersModal 
                             userId={data.state.profile.user_id} 
-                            followersCount={followersCount} 
-                            currFollowers={currFollowers}
                         />
                         <FollowingModal 
                             userId={data.state.profile.user_id}
-                            followingCount={followingCount} 
-                            currFollowing={currFollowing} 
                         />
                     </Follow>
                     <FollowButton onClick={handleFollow}>{(isFollow || isFollowed) ? "Unfollow" : "Follow"}</FollowButton>
